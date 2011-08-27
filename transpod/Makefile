@@ -1,9 +1,17 @@
-watch:
-	../node_modules/.bin/capt watch &
-	../node_modules/.bin/stylus -w `find transpod -name *.stylue`
+COFFEE=../node_modules/.bin/coffee
+STYLUS=../node_modules/.bin/stylus
 
-server:
-	../node_modules/.bin/capt server	
+public/css.css:
+	$(STYLUS) -c `find app -name \*.stylus`
+	cat `find app -name \*.cssus` > $@
+
+public/app.js:
+	$(COFFEE) -c `find app -name \*.coffee`
+	cat `find app -name \?\*.js` > $@
+
+server: public/app.js public/css.css
+	$(COFFEE) -c `find server -name \*.coffee`
+	cd server && node server.js
 
 test:
 	@echo "populate me"
