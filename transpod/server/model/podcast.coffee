@@ -1,7 +1,7 @@
 Config = require('../../config')
 { Podcast, PodcastCollection }  = require('../../app/models/podcast')
 Path = require('path')
-Fs = require('fs')
+fs = require('fs')
 Url = require('url')
 query = require('querystring')
 
@@ -9,10 +9,10 @@ console.log("podcast", Podcast, PodcastCollection)
 
 class ServerPodcast extends Podcast
     filename: (typ) =>
-        rv = Path.join(config.podcast_data, @id, typ)
+        rv = Path.join(Config.podcast_data, @id, typ)
         return rv
     check: (callback) =>
-        fs.exists Path.join(config.podcast_data, @id, "done"), (exists) ->
+        Path.exists Path.join(Config.podcast_data, @id, "done"), (exists) ->
             if exists
                 return callback(null, true)
     download: () =>
@@ -46,9 +46,11 @@ class ServerPodcastCollection extends PodcastCollection
     get_for_url: (url, callback) ->
         _id = "podcast/" + query.escape(url)
         console.log("request", _id)
-        Config.db.get _id, (err, doc) =>
+        Config.db.get [_id], (err, doc) =>
             console.log("err", err, doc)
-            pod = new Podcast doc
+            if err or not doc or not doc.length
+                 return callback err, null
+            pod = new ServerPodcast doc[0].doc
             callback err, pod
 
 module.exports = { ServerPodcast, ServerPodcastCollection }

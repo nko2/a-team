@@ -32,7 +32,14 @@ rpc_handler = (io) ->
                     console.log("n podcast", npodcast)
                     npodcast.save (err, obj) =>
                         console.log("saved", err, obj)
+                        # FIXME jobserver
+                        npodcast.check (err, res) ->
+                            console.log("check done", err, res)
                     #socket.emit 'send', npodcast.toJSON()
+                else
+                    socket.emit 'push', obj.toJSON()
+                    obj.check (ok) =>
+                        console.log("check ok")
 
 module.exports = rpc_handler
 
