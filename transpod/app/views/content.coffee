@@ -32,6 +32,7 @@ class ContentView extends Backbone.View
             new CueView(@, type: 'chapter', start: 0, end: 305),
             new CueView(@, type: 'note', start: 40, end: 60)
         ]
+        @realign()
 
     events:
         'click #zoomin': 'zoomIn'
@@ -40,16 +41,15 @@ class ContentView extends Backbone.View
         'dblclick #zoomout': 'zoomOut'
         'mousemove': 'drag'
         'mouseup': 'dragStop'
+        'mousedown': 'pointCreate'
 
     zoomIn: (ev) ->
         ev.preventDefault()
-        console.log "zoomIn"
         zoomSpan = @zoomEnd - @zoomStart
         @zoomTo @zoomStart + (zoomSpan * 0.25), @zoomEnd - (zoomSpan * 0.25)
 
     zoomOut: (ev) ->
         ev.preventDefault()
-        console.log "zoomOut"
         zoomSpan = @zoomEnd - @zoomStart
         @zoomTo @zoomStart - (zoomSpan * 0.25), @zoomEnd + (zoomSpan * 0.25)
 
@@ -59,7 +59,6 @@ class ContentView extends Backbone.View
         Math.ceil(winWidth * @length / zoomSpan)
 
     zoomTo: (@zoomStart, @zoomEnd) ->
-        console.log "zoomTo #{@zoomStart} #{@zoomEnd}"
         # Normalize first
         if isNaN(@zoomStart)
             @zoomStart = 0
@@ -74,13 +73,9 @@ class ContentView extends Backbone.View
         if @zoomEnd > @length
             @zoomEnd = @length
         @emitZoomUpdate()
-        console.log "zoomTo' #{@zoomStart} #{@zoomEnd}"
 
         fullWidth = @getFullWidth()
-        #@el.css('width', "#{fullWidth}px")
-        console.log("fullWidth=#{fullWidth}")
         $('#dummy').css('left', "#{fullWidth - 4}px")
-        console.log "scroll to #{Math.floor(@zoomStart * fullWidth / @length)}"
         @el.scrollLeft fullWidth * @zoomStart / @length
 
         # Move cues around:
@@ -101,7 +96,6 @@ class ContentView extends Backbone.View
         right = left + winWidth
         @zoomStart = left * @length / fullWidth
         @zoomEnd = right * @length / fullWidth
-        console.log "setZoomToScroll l=#{left} r=#{right} ww=#{winWidth} zs=#{@zoomStart} ze=#{@zoomEnd}"
         @emitZoomUpdate()
 
     realign: ->
@@ -120,14 +114,17 @@ class ContentView extends Backbone.View
             @onZoomUpdate @zoomStart, @zoomEnd
 
     beginDrag: (cue, pos) ->
-        console.log "drag #{pos} of #{cue.el.text()}"
         unless @dragging
             @dragging = { cue, pos }
 
     drag: (ev) ->
         ev.preventDefault()
         if @dragging
-            t = (@el.scrollLeft() + ev.offsetX) * @length / @getFullWidth()
+            if ev.target is @el[0]
+                x = @el.scrollLeft() + (ev.offsetX or ev.layerX)
+            else
+                x = @el.scrollLeft() + ev.pageX - @el[0].offsetLeft
+            t = x * @length / @getFullWidth()
             if @dragging.pos is 'start' and t < @dragging.cue.end
                 @dragging.cue.start = t
             if @dragging.pos is 'end' and t > @dragging.cue.start
@@ -136,7 +133,9 @@ class ContentView extends Backbone.View
 
     dragStop: (ev) ->
         ev.preventDefault()
-        console.log 'dragStop'
         delete @dragging
+
+    pointCreate: (ev) ->
+        ev.preventDefault()
 
 module.exports = ContentView

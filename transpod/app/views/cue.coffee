@@ -16,9 +16,11 @@ class CueView extends Backbone.View
     events:
         'mousedown .grabstart': 'dragStart'
         'mousedown .grabend': 'dragEnd'
+        'mousemove': 'drag'
 
     # Move whole cue
     moveTo: (left, width, top) ->
+        console.log "move cue", left, width, top
         @el.css('left', "#{left}px").
             css('width', "#{width}px")
         if top
@@ -31,5 +33,9 @@ class CueView extends Backbone.View
     dragEnd: (ev) ->
         ev.preventDefault()
         @contentView.beginDrag @, 'end'
+
+    drag: (ev) ->
+        ev.preventDefault()
+        @contentView.drag ev
 
 module.exports = CueView
