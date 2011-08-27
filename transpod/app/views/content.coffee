@@ -76,6 +76,10 @@ class @ContentView extends Backbone.View
         left = @el.scrollLeft()
         @$('#buttons').css('left', "#{left}px")
         @$('#waveform').css('left', "#{left}px")
+        @$('h3').each (i) ->
+            console.log "i=#{i}"
+            $(this).css('left', "#{left + 4}px")
+            $(this).css('top', "#{2 * i}em")
 
     emitZoomUpdate: ->
         if @onZoomUpdate
