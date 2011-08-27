@@ -16,22 +16,7 @@ class WelcomeView extends Backbone.View
 
         # Hooked by router:
         if @onUrl
-            #socket.send("blubb")
-            #podurl = socket.of('/podcast').emit("create", url)
             url = @$('#fresh_url').val()
-            console.log(url)
-            collection.get_url url, (err, podcast) =>
-                console.log("PodcastColl get", err, podcast)
-            collection.fetch
-                url: url
-                success: (obj) ->
-                    console.log("got", obj)
-                error: (err) ->
-                    console.log("blubb", err)
-            #podcast = new Podcast({url: url})
-            
-            #podcast.save()
-
-            #@onUrl url
+            @onUrl url
 
 module.exports = WelcomeView

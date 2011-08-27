@@ -1,12 +1,19 @@
 WaveformView = require('./waveform')
 CueView = require('./cue')
+{ Podcast } = require('../models/podcast')
 
 class ContentView extends Backbone.View
-    initialize: (@url) ->
+    initialize: (url) ->
+        @podcast = new Podcast({ url })
+        #@podcast.save()
+
         @el = $('#content')
         @delegateEvents()
         @el.scroll =>
             @setZoomToScroll()
+            @realign()
+        $(window).scroll =>
+            @realign()
         @length = 600 # STUB
 
         @audio = document.createElement('audio')
@@ -36,13 +43,13 @@ class ContentView extends Backbone.View
         ev.preventDefault()
         console.log "zoomIn"
         zoomSpan = @zoomEnd - @zoomStart
-        @zoomTo @zoomStart + (zoomSpan * 0.1), @zoomEnd - (zoomSpan * 0.1)
+        @zoomTo @zoomStart + (zoomSpan * 0.25), @zoomEnd - (zoomSpan * 0.25)
 
     zoomOut: (ev) ->
         ev.preventDefault()
         console.log "zoomOut"
         zoomSpan = @zoomEnd - @zoomStart
-        @zoomTo @zoomStart - (zoomSpan * 0.1), @zoomEnd + (zoomSpan * 0.1)
+        @zoomTo @zoomStart - (zoomSpan * 0.25), @zoomEnd + (zoomSpan * 0.25)
 
     getFullWidth: ->
         winWidth = @el.innerWidth()
@@ -79,11 +86,7 @@ class ContentView extends Backbone.View
             left = fullWidth * cue.start / @length
             width = fullWidth * (cue.end - cue.start) / @length
             i = ['chapter', 'transcription', 'note', 'comment'].indexOf(cue.type)
-            cue.el.css('left', "#{left}px").
-                css('width', "#{width}px").
-                css('top', "#{12.4 + 4 * i}em")
-
-        @realign()
+            cue.moveTo(Math.floor(left), Math.ceil(width), 192 + 48 * i)
 
     setZoomToScroll: ->
         fullWidth = @getFullWidth()
@@ -95,23 +98,16 @@ class ContentView extends Backbone.View
         console.log "setZoomToScroll l=#{left} r=#{right} ww=#{winWidth} zs=#{@zoomStart} ze=#{@zoomEnd}"
         @emitZoomUpdate()
 
-        @realign()
-
     realign: ->
-        console.log "realign #{@zoomStart}..#{@zoomEnd}"
         # Fixed stuff:
         left = @el.scrollLeft()
-        @$('#buttons').css('left', "#{left}px").
-            css('top', "7em")
+        top = $(window).scrollTop() + @el.scrollTop()
         @waveform.el.css('left', "#{left}px").
             css('width', "#{@el.innerWidth()}px").
-            css('top', "0.2em").
-            css('height', "6.6em")
-        @waveform.zoomTo @zoomStart, @zoomEnd
+            css('top', "#{134 - top}.px")
+        @$('#buttons').css('top', "#{278 - top}px")
         @$('h3').each (i) ->
-            console.log "i=#{i}"
-            $(@).css('left', "#{left + 4}px").
-                css('top', "#{11 + 4 * i}em")
+            $(@).css('top', "#{310 - top + 48 * i}px")
 
     emitZoomUpdate: ->
         if @onZoomUpdate

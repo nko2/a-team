@@ -84,25 +84,6 @@ h2
     font-size: 75%
     text-align: center
 
-#buttons
-    margin-left: 1em
-    content: overflow
-    min-width: 10em
-
-.button
-    cursor: pointer
-    font-size: 140%
-    color: black
-    background: linear-gradient(top, #777, #ddd, #fff, #ccc, #666)
-    padding: 2px 8px 4px
-    margin: 0 0 0 2px
-    border: 1px solid #333
-
-.button:hover
-    border: 1px solid white
-    color: white
-    background-color: #333
-
 #content
     position: absolute
     margin: 0 auto
@@ -127,25 +108,51 @@ h2
 #content > *
     position: absolute
 
+#buttons
+    left: 8%
+    content: overflow
+    min-width: 10em
+    position: fixed
+
+.button
+    cursor: pointer
+    font-size: 140%
+    color: black
+    background: linear-gradient(top, #777, #ddd, #fff, #ccc, #666)
+    padding: 2px 8px 4px
+    margin: 0 0 0 2px
+    border: 1px solid #333
+
+.button:hover
+    border: 1px solid white
+    color: white
+    background-color: #333
+
+#waveform
+    height: 128px
+
 #dummy
     opacity: 0
     width: 1px
 
-h3
+#content h3
+    left: 8%
     font-weight: bolder
     font-size: 90%
     color: #333
     font-variant:small-caps
     width: 20em
+    position: fixed
 
 .cue
     color: black
     background-color: white
     border: 1px solid black
     font-size: 90%
-    padding: 0.5em 0em
     overflow: hidden
     height: 1.2em
+.cue .text
+    padding: 0.1em 0
 
 .chapter
     background: #d1e linear-gradient(top, #e6f, #fff 40%, #faf 70%, #d1e)
@@ -155,3 +162,22 @@ h3
     background: #283 linear-gradient(top, #6ef, #fff 40%, #aff 70%, #28e)
 .comment
     background: #b72 linear-gradient(top, #fe6, #fff 40%, #fca 70%, #b72)
+
+.grab
+    position: relative
+    height: 1.2em
+    background-color: #ccc
+    width: 1px
+    top: 0
+    padding: 0
+    margin: 0
+    opacity: 0.5
+.grab:hover
+    background-color: #fff
+    opacity: 1
+.grabstart
+    left: 0
+    cursor: w-resize
+.grabend
+    right: 0
+    cursor: e-resize
