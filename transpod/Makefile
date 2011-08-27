@@ -10,7 +10,10 @@ public/css.css:
 public/backbone.js:
 	cp ../node_modules/backbone/backbone.js $@
 
-public/app.js: public/backbone.js
+public/jquery.js:
+	cp ../node_modules/jquery/dist/node-jquery.min.js $@
+
+public/app.js: public/backbone.js public/jquery.js
 	$(COFFEE) -c `find app -name \*.coffee`
 	cat `find app -name \?\*.js` > $@
 
