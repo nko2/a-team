@@ -4,9 +4,11 @@ CueView = require('./cue')
 { Cue } = require('../models/cue')
 Backbone = require('backbone')
 
+Backbone.sync = require('../models/sync')
+
 class ContentView extends Backbone.View
-    initialize: (url) ->
-        @podcast = new Podcast( url: url )
+    initialize: (@url) ->
+        @podcast = new Podcast( url: @url )
         @podcast.get('cues').bind 'add', (cue) =>
             view = new CueView @, cue
             @cueViews.push view
@@ -152,7 +154,7 @@ class ContentView extends Backbone.View
         type = yToCategory(ev.offsetY or ev.layerY)
         t = @length * ((ev.offsetX or ev.layerX) + @el.scrollLeft()) / @getFullWidth()
         if type
-            cue = new Cue(type: type, start: t, end: t + 10)
+            cue = new Cue(type: type, start: t, end: t + 10, podcast: @url)
             @podcast.get('cues').add cue
             @cueToEdit = cue
             cue.save()

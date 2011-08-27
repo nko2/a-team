@@ -2,18 +2,15 @@ Backbone = require("backbone")
 { Cue, CueCollection } = require('./cue')
 
 class Podcast extends Backbone.Model
-  # required:
-  # url
-  # author
-  defaults:
-    "url":      null
-    "author":   "unknown"
-    "guests":   []
+    defaults:
+        url: null
+        author: "unknown"
+        guests: []
 
-  initialize: ->
-    # ...
-    cues = CueCollection
-
+    initialize: ->
+        @set cues: new CueCollection()
+        socket.of('/podcast').on 'push', (o) =>
+            console.log "got pushed", o
 
 class PodcastCollection extends Backbone.Collection
     model: Podcast

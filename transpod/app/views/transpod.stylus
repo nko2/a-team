@@ -150,11 +150,12 @@ h2
     background-color: white
     border: 1px solid black
     font-size: 90%
-    height: 1.2em
+    height: 1.6em
     overflow: hidden
     white-space: nowrap
 .cue .text
-    padding: 0.1em 3px
+    padding: 0.3em 3px
+    display: block
 
 .chapter
     background: #d1e linear-gradient(top, #e6f, #fff 40%, #faf 70%, #d1e)

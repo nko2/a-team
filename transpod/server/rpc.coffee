@@ -5,17 +5,52 @@ check = require('validator').check
 
 console.log(ServerPodcast, ServerPodcastCollection)
 
+# ♥
+podcastListeners = {}
+
+class User
+    constructor: ->
+        @myUrls = []
+
+    push: (obj) ->
+        if @onPush
+            @onPush obj
+
+    shutdown: ->
+        # Unsubscribe
+        for url in @myUrls
+            podcastListeners[url] =
+                podcastListeners[url].filter (user) =>
+                    user isnt @
+            if podcastListeners[url].length < 0
+                delete podcastListeners[url]
+
+    get: (url) ->
+        # Subscribe
+        unless podcastListeners[url]?
+            podcastListeners[url] = []
+        podcastListeners[url].push @
+
+        # Fetch
+
+    addCue: (obj) ->
 
 rpc_handler = (io) ->
     io.of('/podcast').on 'connection', (socket) ->
-        podcast_collections = new ServerPodcastCollection
-        #pod
-        console.log("!!!!!!!         got connection !!!!!!")
+        user = new User()
+        user.onPush (obj) ->
+            socket.emit 'push', obj
+
         socket.on 'list', (start, stop) ->
             console.log("list podcasts")
-            
+
         socket.on 'get', (url) ->
             console.log("get podcast url:", url)
+            user.get url
+
+        socket.on 'addCue', (obj) ->
+            user.addCue obj
+
             try
                 url = url.url
                 console.log("rulr",url)
@@ -40,6 +75,14 @@ rpc_handler = (io) ->
                     socket.emit 'push', obj.toJSON()
                     obj.check (ok) =>
                         console.log("check ok")
+
+        socket.on 'addCue', (cue) ->
+            podcast_collections.get_for_url url, (err, obj) =>
+                console.log("got podcast, hurray", err, "end")
+                console.log("obj", obj)
+                unless err
+                    socket.emit 'push', obj.toJSON()
+
 
 module.exports = rpc_handler
 
