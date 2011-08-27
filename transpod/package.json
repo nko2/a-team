@@ -1,0 +1,16 @@
+{
+    "name": "transpod"
+  , "version": "0.0.1"
+  , "description": "transcribe podcasts"
+  , "keywords": []
+  , "author": "A-Team <<</>>"
+  , "dependencies": {
+      "backbone" = "*",
+      "backbone-couch" = "*",
+      "cluster" = "*",
+      "kue" = "*",
+      "vows" = "*"
+  }
+  , "main": "index"
+  , "engines": { "node": "0.4.x" }
+}
