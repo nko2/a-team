@@ -1,5 +1,8 @@
 Backbone = require("backbone")
 { Chapter, ChapterCollection } = require('./chapter')
+{ Note, NoteCollection } = require('./note')
+{ Comment, CommentCollection } = require('./comment')
+{ Transcription, TranscriptionCollection } = require('./chapter')
 
 class Podcast extends Backbone.Model
   # required:
@@ -13,6 +16,9 @@ class Podcast extends Backbone.Model
   initialize: ->
     # ...
     chapters = ChapterCollection
+    notes = NoteCollection
+    transcription = TranscriptionCollection
+    comments = CommentCollection
 
 
 class PodcastCollection extends Backbone.Collection
@@ -24,6 +30,7 @@ class PodcastCollection extends Backbone.Collection
             @socket_io = socket.of("/podcast")
             @socket_io.on "send", (data) =>
                 console.log("get data", data)
+
 
     get_url: (url) =>
         @socket_io.emit("get", {"url": url})
