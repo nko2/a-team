@@ -113,6 +113,7 @@ h2
     content: overflow
     min-width: 10em
     position: fixed
+    cursor: crosshair
 
 .button
     cursor: pointer
@@ -152,7 +153,7 @@ h2
     overflow: hidden
     height: 1.2em
 .cue .text
-    padding: 0.1em 0
+    padding: 0.1em 3px
 
 .chapter
     background: #d1e linear-gradient(top, #e6f, #fff 40%, #faf 70%, #d1e)
@@ -164,11 +165,11 @@ h2
     background: #b72 linear-gradient(top, #fe6, #fff 40%, #fca 70%, #b72)
 
 .grab
-    position: relative
-    height: 1.2em
+    position: absolute
     background-color: #ccc
-    width: 1px
+    width: 3px
     top: 0
+    bottom: 0
     padding: 0
     margin: 0
     opacity: 0.5

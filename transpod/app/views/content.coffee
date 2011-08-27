@@ -28,9 +28,9 @@ class ContentView extends Backbone.View
 
         @cues = [
             # STUBS:
-            new CueView(type: 'comment', start: 10, end: 20),
-            new CueView(type: 'chapter', start: 0, end: 305),
-            new CueView(type: 'note', start: 40, end: 60)
+            new CueView(@, type: 'comment', start: 10, end: 20),
+            new CueView(@, type: 'chapter', start: 0, end: 305),
+            new CueView(@, type: 'note', start: 40, end: 60)
         ]
 
     events:
@@ -38,6 +38,8 @@ class ContentView extends Backbone.View
         'dblclick #zoomin': 'zoomIn'
         'click #zoomout': 'zoomOut'
         'dblclick #zoomout': 'zoomOut'
+        'mousemove': 'drag'
+        'mouseup': 'dragStop'
 
     zoomIn: (ev) ->
         ev.preventDefault()
@@ -83,10 +85,14 @@ class ContentView extends Backbone.View
 
         # Move cues around:
         for cue in @cues
-            left = fullWidth * cue.start / @length
-            width = fullWidth * (cue.end - cue.start) / @length
-            i = ['chapter', 'transcription', 'note', 'comment'].indexOf(cue.type)
-            cue.moveTo(Math.floor(left), Math.ceil(width), 192 + 48 * i)
+            @moveCue cue
+
+    moveCue: (cue) ->
+        fullWidth = @getFullWidth()
+        left = fullWidth * cue.start / @length
+        width = fullWidth * (cue.end - cue.start) / @length
+        i = ['chapter', 'transcription', 'note', 'comment'].indexOf(cue.type)
+        cue.moveTo(Math.floor(left), Math.ceil(width), 192 + 48 * i)
 
     setZoomToScroll: ->
         fullWidth = @getFullWidth()
@@ -112,5 +118,25 @@ class ContentView extends Backbone.View
     emitZoomUpdate: ->
         if @onZoomUpdate
             @onZoomUpdate @zoomStart, @zoomEnd
+
+    beginDrag: (cue, pos) ->
+        console.log "drag #{pos} of #{cue.el.text()}"
+        unless @dragging
+            @dragging = { cue, pos }
+
+    drag: (ev) ->
+        ev.preventDefault()
+        if @dragging
+            t = (@el.scrollLeft() + ev.offsetX) * @length / @getFullWidth()
+            if @dragging.pos is 'start' and t < @dragging.cue.end
+                @dragging.cue.start = t
+            if @dragging.pos is 'end' and t > @dragging.cue.start
+                @dragging.cue.end = t
+            @moveCue @dragging.cue
+
+    dragStop: (ev) ->
+        ev.preventDefault()
+        console.log 'dragStop'
+        delete @dragging
 
 module.exports = ContentView

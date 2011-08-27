@@ -1,8 +1,10 @@
 class CueView extends Backbone.View
-    initialize: (@model) ->
+    initialize: (@contentView, @model) ->
         @el = $('<p class="cue"><span class="grab grabstart">&nbsp;</span><span class="text"></span><span class="grab grabend">&nbsp;</span></p>')
-        @$('.text').text('Hello World')
+        @$('.text').text("Hello World #{Math.ceil(Math.random() * 23)}")
         $('#content').append(@el)
+
+        @delegateEvents()
 
         # STUB:
         @type = @model.type
@@ -11,11 +13,23 @@ class CueView extends Backbone.View
 
         @el.addClass @type
 
+    events:
+        'mousedown .grabstart': 'dragStart'
+        'mousedown .grabend': 'dragEnd'
+
+    # Move whole cue
     moveTo: (left, width, top) ->
-        console.log "cue top #{top}"
         @el.css('left', "#{left}px").
-            css('width', "#{width}px").
-            css('top', "#{top}px")
-        @$('.grabend').css('left', "#{width - 1}px")
+            css('width', "#{width}px")
+        if top
+            @el.css('top', "#{top}px")
+
+    dragStart: (ev) ->
+        ev.preventDefault()
+        @contentView.beginDrag @, 'start'
+
+    dragEnd: (ev) ->
+        ev.preventDefault()
+        @contentView.beginDrag @, 'end'
 
 module.exports = CueView
