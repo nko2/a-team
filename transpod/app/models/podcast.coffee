@@ -1,4 +1,5 @@
 Backbone = require("backbone")
+{ Chapter, ChapterCollection } = require('./chapter')
 
 class Podcast extends Backbone.Model
   # required:
@@ -11,6 +12,7 @@ class Podcast extends Backbone.Model
 
   initialize: ->
     # ...
+    chapters = ChapterCollection
 
 
 class PodcastCollection extends Backbone.Collection
