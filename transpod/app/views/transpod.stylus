@@ -75,6 +75,8 @@ h2
 
 #buttons
     margin-left: 1em
+    content: overflow
+    min-width: 10em
 
 .button
     cursor: pointer
@@ -87,14 +89,16 @@ h2
 
 .button:hover
     border: 1px dotted black
-    background-color: #333
+    color: white
+    background-color: #999
 
 #content
-    position: relative
+    position: absolute
     margin: 0 auto
     padding: 0
-    max-width: 90%
-    overflow: scroll
+    left: 5%
+    width: 90%
+    overflow: auto
     color: black
     background-color: #777
     min-height: 30em
@@ -109,9 +113,8 @@ h2
     scrollbar-shadow-color: black
     scrollbar-track-color: #333
 
-#content > * {
+#content > *
     position: absolute
-}
 
 #dummy
     opacity: 0
@@ -122,3 +125,14 @@ h3
     font-size: 90%
     color: #333
     font-variant:small-caps
+    width: 20em
+
+.cue
+    color: black
+    background-color: white
+    border: 1px solid black
+    font-size: 90%
+    padding: 0.5em 0em
+    overflow: hidden
+    height: 1.2em
+
