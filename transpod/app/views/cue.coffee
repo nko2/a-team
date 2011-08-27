@@ -6,12 +6,9 @@ class CueView extends Backbone.View
 
         super()
 
-        # STUB:
-        @type = @model.type
-        @start = @model.start
-        @end = @model.end
-
-        @el.addClass @type
+        @model.bind 'change', =>
+            @contentView.moveCue @
+        @el.addClass @model.get('type')
 
     events:
         'mousedown .grabstart': 'dragStart'
@@ -31,7 +28,6 @@ class CueView extends Backbone.View
 
     # Move whole cue
     moveTo: (left, width, top) ->
-        console.log "move cue", left, width, top
         @el.css('left', "#{left}px").
             css('width', "#{width}px").
             css('z-index', "#{left}")

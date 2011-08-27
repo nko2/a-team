@@ -1,6 +1,7 @@
 WaveformView = require('./waveform')
 CueView = require('./cue')
 { Podcast } = require('../models/podcast')
+{ Cue } = require('../models/cue')
 
 class ContentView extends Backbone.View
     initialize: (url) ->
@@ -28,9 +29,9 @@ class ContentView extends Backbone.View
 
         @cues = [
             # STUBS:
-            new CueView(@, type: 'comment', start: 10, end: 20),
-            new CueView(@, type: 'chapter', start: 0, end: 305),
-            new CueView(@, type: 'note', start: 40, end: 60)
+            new CueView(@, new Cue(type: 'comment', start: 10, end: 20)),
+            new CueView(@, new Cue(type: 'chapter', start: 0, end: 305)),
+            new CueView(@, new Cue(type: 'note', start: 40, end: 60))
         ]
         @realign()
 
@@ -46,12 +47,12 @@ class ContentView extends Backbone.View
     zoomIn: (ev) ->
         ev.preventDefault()
         zoomSpan = @zoomEnd - @zoomStart
-        @zoomTo @zoomStart + (zoomSpan * 0.25), @zoomEnd - (zoomSpan * 0.25)
+        @zoomTo @zoomStart + (zoomSpan * 0.2), @zoomEnd - (zoomSpan * 0.2)
 
     zoomOut: (ev) ->
         ev.preventDefault()
         zoomSpan = @zoomEnd - @zoomStart
-        @zoomTo @zoomStart - (zoomSpan * 0.25), @zoomEnd + (zoomSpan * 0.25)
+        @zoomTo @zoomStart - (zoomSpan * 0.3), @zoomEnd + (zoomSpan * 0.3)
 
     getFullWidth: ->
         winWidth = @el.innerWidth()
@@ -84,9 +85,9 @@ class ContentView extends Backbone.View
 
     moveCue: (cue) ->
         fullWidth = @getFullWidth()
-        left = fullWidth * cue.start / @length
-        width = fullWidth * (cue.end - cue.start) / @length
-        cue.moveTo(Math.floor(left), Math.ceil(width), categoryToY(cue.type))
+        left = fullWidth * cue.model.get('start') / @length
+        width = fullWidth * (cue.model.get('end') - cue.model.get('start')) / @length
+        cue.moveTo(Math.floor(left), Math.ceil(width), categoryToY(cue.model.get('type')))
 
     setZoomToScroll: ->
         fullWidth = @getFullWidth()
@@ -124,10 +125,10 @@ class ContentView extends Backbone.View
             else
                 x = @el.scrollLeft() + ev.pageX - @el[0].offsetLeft
             t = x * @length / @getFullWidth()
-            if @dragging.pos is 'start' and t < @dragging.cue.end
-                @dragging.cue.start = t
-            if @dragging.pos is 'end' and t > @dragging.cue.start
-                @dragging.cue.end = t
+            if @dragging.pos is 'start' and t < @dragging.cue.model.get('end')
+                @dragging.cue.model.set start: t
+            if @dragging.pos is 'end' and t > @dragging.cue.model.get('start')
+                @dragging.cue.model.set end: t
             @moveCue @dragging.cue
 
     dragStop: (ev) ->
@@ -139,7 +140,8 @@ class ContentView extends Backbone.View
         type = yToCategory(ev.offsetY or ev.layerY)
         t = @length * ((ev.offsetX or ev.layerX) + @el.scrollLeft()) / @getFullWidth()
         if type
-            cue = new CueView(@, type: type, start: t, end: t + 10)
+            # TODO: only add to collection, let handler add it
+            cue = new CueView(@, new Cue(type: type, start: t, end: t + 10))
             @cues.push cue
             @moveCue cue
             cue.editText()
