@@ -3,7 +3,7 @@ $(document).ready ->
         initialize: ->
             $('#content').hide()
 
-            @welcomeView = new require('views/welcome')()
+            @welcomeView = new require('./views/welcome')()
             @welcomeView.onUrl = (s) =>
                 @navigate @displayUrl(0, 0, 60, s), true
 
@@ -25,7 +25,7 @@ $(document).ready ->
             "at #{cap at} from #{cap start} to #{cap end} of #{url}"
 
         display: (at, start, end, url) ->
-            @contentView = new require('views/content')(url)
+            @contentView = new require('./views/content')(url)
             #@contentView.seekTo at
             @contentView.onZoomUpdate = (start, end) =>
                 @navigate @displayUrl(at, start, end, url), false
