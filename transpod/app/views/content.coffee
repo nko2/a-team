@@ -14,6 +14,8 @@ class @ContentView extends Backbone.View
             @length = @audio.duration
         @audio.load()
 
+        @cues = []
+
     events:
         'click #zoomin': 'zoomIn'
         'click #zoomout': 'zoomOut'
@@ -29,6 +31,11 @@ class @ContentView extends Backbone.View
         console.log "zoomOut"
         zoomSpan = @zoomEnd - @zoomStart
         @zoomTo @zoomStart - (zoomSpan * 0.1), @zoomEnd + (zoomSpan * 0.1)
+
+    getFullWidth: ->
+        winWidth = @el.innerWidth()
+        zoomSpan = @zoomEnd - @zoomStart
+        Math.ceil(winWidth * @length / zoomSpan)
 
     zoomTo: (@zoomStart, @zoomEnd) ->
         console.log "zoomTo #{@zoomStart} #{@zoomEnd}"
@@ -48,14 +55,15 @@ class @ContentView extends Backbone.View
         @emitZoomUpdate()
         console.log "zoomTo' #{@zoomStart} #{@zoomEnd}"
 
-        # Calculate full width
-        winWidth = @el.innerWidth()
-        zoomSpan = @zoomEnd - @zoomStart
-        fullWidth = Math.ceil(winWidth * @length / zoomSpan)
+        fullWidth = @getFullWidth()
         #@el.css('width', "#{fullWidth}px")
-        console.log "winWidth=#{winWidth} fullWidth=#{fullWidth}"
-        $('#dummy').css('left', "#{fullWidth - 2}px")
+        $('#dummy').css('left', "#{fullWidth - 4}px")
         @el.scrollLeft Math.floor(@zoomStart * fullWidth / @length)
+
+        # Move cues around:
+        for cue in @cues
+            x = fullWidth * cue.start / @length
+            cue.css('left', "#{x}px")
 
         @realign()
 
@@ -78,8 +86,8 @@ class @ContentView extends Backbone.View
         @$('#waveform').css('left', "#{left}px")
         @$('h3').each (i) ->
             console.log "i=#{i}"
-            $(this).css('left', "#{left + 4}px")
-            $(this).css('top', "#{2 * i}em")
+            $(@).css('left', "#{left + 4}px")
+            $(@).css('top', "#{12 + 4 * i}em")
 
     emitZoomUpdate: ->
         if @onZoomUpdate

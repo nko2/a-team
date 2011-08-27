@@ -88,6 +88,7 @@ h2
     border: 1px dotted black
 
 #content
+    position: relative
     margin: 0 auto
     padding: 0
     max-width: 90%
@@ -107,7 +108,7 @@ h2
     scrollbar-track-color: #333
 
 #content > * {
-    position: relative
+    position: absolute
 }
 
 #dummy
