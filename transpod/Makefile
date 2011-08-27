@@ -7,7 +7,10 @@ public/css.css:
 	$(STYLUS) -c `find app -name \*.stylus`
 	cat `find app -name \*.cssus` > $@
 
-public/app.js:
+public/backbone.js:
+	cp ../node_modules/backbone/backbone.js $@
+
+public/app.js: public/backbone.js
 	$(COFFEE) -c `find app -name \*.coffee`
 	cat `find app -name \?\*.js` > $@
 
