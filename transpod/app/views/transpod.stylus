@@ -1,0 +1,32 @@
+body
+    font-family: sans-serif;
+    color: white;
+    background-color: #333;
+
+
+h1
+    margin: 0;
+    text-align: center;
+    font-size: 300%;
+
+h1:before
+    content: url("transpod.png");
+
+
+#content
+    margin: 0 auto;
+    max-width: 90%;
+    overflow: scroll;
+    color: black;
+    background-color: white;
+    min-height: 400px;
+
+    scrollbar-base-color: #333;
+    scrollbar-3dlight-color: white;
+    scrollbar-arrow-color: white;
+    scrollbar-darkshadow-color: black;
+    scrollbar-face-color: #333;
+    scrollbar-highlight-color: #ccc;
+    scrollbar-shadow-color: black;
+    scrollbar-track-color: #333;
+
