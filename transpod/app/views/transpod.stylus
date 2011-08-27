@@ -8,7 +8,7 @@ h1
     text-align: center
     font-size: 600%
     font-weight: bolder
-    font-variant:small-caps
+    font-variant: small-caps
     min-height: 132px
 
 h1:before
@@ -73,12 +73,15 @@ h2
     font-size: 75%
     text-align: center
 
+#buttons
+    margin-left: 1em
+
 .button
     font-size: 140%
     color: black
     background: #ccc
     padding: 2px 8px 4px
-    margin: 0 1px
+    margin: 0 0 0 2px
     border: 1px solid #333
 
 .button:hover
@@ -90,8 +93,8 @@ h2
     max-width: 90%
     overflow: scroll
     color: black
-    background-color: white
-    min-height: 400px
+    background-color: #777
+    min-height: 30em
 
     border-radius: 6px
     scrollbar-base-color: #333
@@ -110,3 +113,9 @@ h2
 #dummy
     opacity: 0
     width: 1px
+
+h3
+    font-weight: bolder
+    font-size: 90%
+    color: #333
+    font-variant:small-caps
