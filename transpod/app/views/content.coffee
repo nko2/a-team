@@ -86,8 +86,7 @@ class ContentView extends Backbone.View
         fullWidth = @getFullWidth()
         left = fullWidth * cue.start / @length
         width = fullWidth * (cue.end - cue.start) / @length
-        i = ['chapter', 'transcription', 'note', 'comment'].indexOf(cue.type)
-        cue.moveTo(Math.floor(left), Math.ceil(width), 192 + 48 * i)
+        cue.moveTo(Math.floor(left), Math.ceil(width), categoryToY(cue.type))
 
     setZoomToScroll: ->
         fullWidth = @getFullWidth()
@@ -107,7 +106,7 @@ class ContentView extends Backbone.View
             css('top', "#{134 - top}.px")
         @$('#buttons').css('top', "#{278 - top}px")
         @$('h3').each (i) ->
-            $(@).css('top', "#{310 - top + 48 * i}px")
+            $(@).css('top', "#{118 - top + categoryToY(i)}px")
 
     emitZoomUpdate: ->
         if @onZoomUpdate
@@ -137,5 +136,25 @@ class ContentView extends Backbone.View
 
     pointCreate: (ev) ->
         ev.preventDefault()
+        type = yToCategory(ev.offsetY or ev.layerY)
+        t = @length * ((ev.offsetX or ev.layerX) + @el.scrollLeft()) / @getFullWidth()
+        if type
+            cue = new CueView(@, type: type, start: t, end: t + 10)
+            @cues.push cue
+            @moveCue cue
+            cue.editText()
 
 module.exports = ContentView
+
+CATEGORIES = ['chapter', 'transcription', 'note', 'comment']
+
+categoryToY = (category) ->
+    if typeof category is 'string'
+        i = Math.max 0, CATEGORIES.indexOf(category)
+    else
+        i = category
+    192 + 48 * i
+
+yToCategory = (y) ->
+    y -= 192
+    CATEGORIES[Math.floor(y / 48)]

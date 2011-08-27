@@ -1,6 +1,6 @@
 class CueView extends Backbone.View
     constructor: (@contentView, @model) ->
-        @el = $('<p class="cue"><span class="grab grabstart">&nbsp;</span><span class="text" contentEditable="true"></span><span class="grab grabend">&nbsp;</span></p>')
+        @el = $('<p class="cue"><span class="grab grabstart">&nbsp;</span><span class="text" contentEditable="true" title="Edit cue text. Clear all to remove."></span><span class="grab grabend">&nbsp;</span></p>')
         @$('.text').text("Hello World #{Math.ceil(Math.random() * 23)}")
         $('#content').append(@el)
 
@@ -27,14 +27,14 @@ class CueView extends Backbone.View
         @$('.text').focus()
 
     textEdited: (ev) ->
-        ev.preventDefault()
         console.log 'textEdited', @$('.text').text()
 
     # Move whole cue
     moveTo: (left, width, top) ->
         console.log "move cue", left, width, top
         @el.css('left', "#{left}px").
-            css('width', "#{width}px")
+            css('width', "#{width}px").
+            css('z-index', "#{left}")
         if top
             @el.css('top', "#{top}px")
 
