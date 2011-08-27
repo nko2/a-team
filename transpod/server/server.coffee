@@ -42,13 +42,27 @@ app.configure () ->
     console.log(rpc)
 
     public_path = path.join(__dirname, '..', 'public')
+    requires = [
+        'underscore'
+        'backbone'
+        jquery:'jquery-browserify'
+    ]
+    findRequires = (dir) ->
+        try
+            files = fs.readdirSync path.join(__dirname, '..', dir)
+            for file in files
+                console.log dir, file
+                if (m = file.match(/^(.+)\.coffee$/))
+                    requires.push "#{path.join('..', dir, file)}"
+                else
+                    findRequires "#{dir}/#{file}"
+        catch e
+            console.error e
+
+    findRequires('app')
+    console.log requires: requires
     javascript = browserify
-        require: [
-               'underscore'
-                'backbone'
-                path.join(public_path, 'app')
-                jquery:'jquery-browserify'
-                ]
+        require: requires
         fastmatch: true
 
     backbone = path.join(__dirname, '..', '..', "node_modules", "backbone", "backbone.js")
