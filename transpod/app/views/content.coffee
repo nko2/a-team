@@ -14,6 +14,8 @@ class @ContentView extends Backbone.View
             @length = @audio.duration
         @audio.load()
 
+        @waveform = new WaveformView()
+
         @cues = []
 
     events:
@@ -83,7 +85,8 @@ class @ContentView extends Backbone.View
         # Fixed stuff:
         left = @el.scrollLeft()
         @$('#buttons').css('left', "#{left}px")
-        @$('#waveform').css('left', "#{left}px")
+        @waveform.el.css('left', "#{left}px")
+        @waveform.zoomTo @zoomStart, @zoomEnd
         @$('h3').each (i) ->
             console.log "i=#{i}"
             $(@).css('left', "#{left + 4}px")
