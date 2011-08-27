@@ -3,6 +3,7 @@ Config = require('../../config')
 Path = require('path')
 Fs = require('fs')
 Url = require('url')
+query = require('querystring')
 
 console.log("podcast", Podcast, PodcastCollection)
 
@@ -24,8 +25,31 @@ class ServerPodcast extends Podcast
         fetcher.on 'error', (err) ->
               console.log("Got error: " + err.message)
 
+    _id: () =>
+        console.log "_id", query.escape(@get("podurl"))
+        rv =  "podcast/" + query.escape(@get("podurl"))
+        console.log(rv)
+        return rv
+
+    save: (callback) =>
+        console.log("save model")
+        data = @toJSON()
+        data["_id"] = @_id()
+        data["type"] = "podcast"
+        data["id"] = data["name"] = @get("podurl")
+        console.log("data", data, @_id())
+        Config.db.save [data], data, (err, res) ->
+            console.log("saved error:", err, res)
+            callback(err, res)
+
 class ServerPodcastCollection extends PodcastCollection
+    get_for_url: (url, callback) ->
+        _id = "podcast/" + query.escape(url)
+        console.log("request", _id)
+        Config.db.get _id, (err, doc) =>
+            console.log("err", err, doc)
+            pod = new Podcast doc
+            callback err, pod
 
-
-module.exports = ServerPodcast
+module.exports = { ServerPodcast, ServerPodcastCollection }
 

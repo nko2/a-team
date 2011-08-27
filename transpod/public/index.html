@@ -4,12 +4,15 @@
 <title>Transpod podcast crowd transcription</title>
 <link rel="stylesheet" href="/css.css">
 <script src="/browserify.js"  type="application/javascript"></script>
-<script src="/js/socket.io.js"  type="application/javascript"></script>
+<script src="/websocket/socket.io.js"  type="application/javascript"></script>
 <script type="application/javascript">
 window._ = require('underscore');
 window.$ = require('jquery');
 window.Backbone = require('backbone');
-io.connect('http://localhost:3000');
+socket = io.connect('', {heartbeat: true, resource: "websocket"});
+socket.of("/podcast").on("error", function(error) {
+        console.log("error received:", error)
+});
 require('./router');
 </script>
 </head>
@@ -27,7 +30,7 @@ You, Sir, need to enable JavaScript!
 <div id="fresh">
   <h2>Enter a Podcast recording:</h2>
   <form>
-  <input type="text" id="fresh_url" placeholder="http://example.com/podcast.mp3">
+  <input type="text" id="fresh_url" placeholder="http://example.com/podcast.mp3" value="http://phobos.hq.c3d2.de/pentaradio-2011-07-26.mp3">
   <input type="submit" id="fresh_ok" value="Annotate!">
   </form>
   <p class="hint">

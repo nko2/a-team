@@ -8,3 +8,4 @@ repositories/*
 .*.kate-swp
 views/*.html
 
+config.js~ Makefile~ package.json~
