@@ -5,11 +5,12 @@
   , "keywords": []
   , "author": "A-Team <<</>>"
   , "dependencies": {
-      "backbone" = "*",
-      "backbone-couch" = "*",
-      "cluster" = "*",
-      "kue" = "*",
-      "vows" = "*"
+      "backbone" :"*",
+      "backbone-couch" : "*",
+      "cluster" : "*",
+      "kue" : "*",
+      "vows" : "*",
+      "capt" : "*"
   }
   , "main": "index"
   , "engines": { "node": "0.4.x" }
