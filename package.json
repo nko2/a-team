@@ -5,6 +5,9 @@
   , "keywords": []
   , "author": "A-Team <<</>>"
   , "dependencies": {
+      "browserify" : "*",
+      "jquery-browserify" : "*",
+      "underscore": "*",
       "express" : "*",
       "connect" : "*",
       "socket.io" : "*",

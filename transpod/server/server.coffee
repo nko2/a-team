@@ -10,6 +10,8 @@ Backbone = require('backbone')
 Routes = require('./routes')
 sio = require('socket.io')
 rpc = require('./rpc')
+browserify = require('browserify')
+path = require('path')
 
 app = express.createServer()
 
@@ -38,6 +40,23 @@ app.configure () ->
     app.enable('log')
     console.log(rpc)
 
+    public_path = path.join(__dirname, '..', 'public')
+    javascript = browserify
+        require: [
+               'underscore'
+                'backbone'
+                path.join(public_path, 'app')
+                jquery:'jquery-browserify'
+                ]
+        fastmatch: true
+
+    backbone = path.join(__dirname, '..', '..', "node_modules", "backbone", "backbone.js")
+    javascript.register 'pre', ->
+        @files[backbone].body = @files[backbone].body.replace(
+            "var module = { exports : {} };",
+            "var module = { exports : {_:window._, jQuery:window.$} };")
+
+    app.use javascript
 
     # Create database, push default design documents to it and
     # assign sync method to Backbone.
