@@ -32,6 +32,12 @@ app.configure () ->
     app.use(connect.static(__dirname + '/../public/'))
     app.use(express.errorHandler({dumpExceptions: true, showStack: true}))
 
+
+    # Create database, push default design documents to it and
+    # assign sync method to Backbone.
+    couch.install (err) ->
+      Backbone.sync = couch.sync
+
     #connect.router (app) ->
     Routes(app)
 

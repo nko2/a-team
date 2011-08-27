@@ -1,5 +1,5 @@
 (function() {
-  var Podcast;
+  var Backbone, Podcast;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -8,6 +8,7 @@
     child.__super__ = parent.prototype;
     return child;
   };
+  Backbone = require("backbone");
   Podcast = (function() {
     function Podcast() {
       Podcast.__super__.constructor.apply(this, arguments);
