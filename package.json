@@ -17,6 +17,7 @@
       "nko" : "*",
       "coffee-script" : "*",
       "colors" : "*",
+      "eyes": "*",
       "jquery" : "*"
   }
   , "main": "index"

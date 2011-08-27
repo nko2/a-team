@@ -3,13 +3,23 @@ HOST = (process.env.VCAP_APP_HOST || 'localhost')
 
 fs = require('fs')
 express = require('express')
+eyes = require('eyes')
 app = express.createServer()
 colors = require('colors')
 connect = require('connect')
+Backbone = require('backbone')
+Routes = require('./routes')
+
+couch = require('backbone-couch')
+    host: '127.0.0.1',
+    port: '5984',
+    name: 'transpod'
+
+
 
 # Config
 app.set('views', __dirname + '/app/views')
-#app.register('.html', require('ejs'))
+app.register('.html', require('ejs'))
 app.set('view engine', 'html')
 
 app.configure () ->
@@ -18,14 +28,14 @@ app.configure () ->
     app.use(express.bodyParser())
     app.use(express.methodOverride())
     app.use(express.cookieParser())
-    app.use(express.static(__dirname + '../public'))
-    app.use(app.router)
+
+    app.use(connect.static(__dirname + '/../public/'))
     app.use(express.errorHandler({dumpExceptions: true, showStack: true}))
 
-    connect.router (app) ->
-       app.get '/user/:id', (req, res, next) ->
-           console.log(res)
+    #connect.router (app) ->
+    Routes(app)
 
+    app.use(app.router)
 # Resources
 ###
 bootResources(app) ->
