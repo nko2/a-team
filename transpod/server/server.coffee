@@ -45,21 +45,9 @@ app.configure () ->
     requires = [
         'underscore'
         'backbone'
+        path.join(__dirname, '..', 'app/requires.coffee')
         jquery:'jquery-browserify'
     ]
-    findRequires = (dir) ->
-        try
-            files = fs.readdirSync path.join(__dirname, '..', dir)
-            for file in files
-                console.log dir, file
-                if (m = file.match(/^(.+)\.coffee$/))
-                    requires.push "#{path.join('..', dir, file)}"
-                else
-                    findRequires "#{dir}/#{file}"
-        catch e
-            console.error e
-
-    findRequires('app')
     console.log requires: requires
     javascript = browserify
         require: requires
