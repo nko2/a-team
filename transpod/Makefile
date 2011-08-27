@@ -18,7 +18,7 @@ public/app.js: public/jquery.js
 	cat app/models/cue.js `find app -name \?\*.js` > $@
 
 server: 
-	coffee server/server.coffee
+	../node_modules/.bin/coffee server/server.coffee
 
 clean:
 	rm -f public/app.js public/css.css
