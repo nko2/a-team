@@ -1,4 +1,4 @@
-server:
+watch:
 	../node_modules/.bin/capt watch
 
 server:
