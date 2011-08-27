@@ -15,7 +15,7 @@ public/jquery.js:
 
 public/app.js: public/jquery.js
 	$(COFFEE) -c `find app -name \*.coffee`
-	cat `find app -name \?\*.js` > $@
+	cat app/models/cue.js `find app -name \?\*.js` > $@
 
 server: public/app.js public/css.css files
 	$(COFFEE) -c `find server -name \*.coffee`

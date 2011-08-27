@@ -1,0 +1,3 @@
+class @Cue extends Backbone.Model
+  initialize: ->
+    # ...

@@ -1,5 +1,3 @@
-class Comment extends Backbone.Model
-  initialize: ->
-    # ...
+class @Comment extends Cue
+    type: 'comment'
 
-@Comment = Comment

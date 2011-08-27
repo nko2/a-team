@@ -1,5 +1,2 @@
-class Transcription extends Backbone.Model
-  initialize: ->
-    # ...
-
-@Transcription = Transcription
+class @Transcription extends Cue
+    type: 'transcription'

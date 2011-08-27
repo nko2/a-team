@@ -1,5 +1,3 @@
-class Note extends Backbone.Model
-  initialize: ->
-    # ...
+class @Note extends Cue
+    type: 'note'
 
-@Note = Note

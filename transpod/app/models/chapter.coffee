@@ -1,5 +1,2 @@
-class Chapter extends Backbone.Model
-  initialize: ->
-    # ...
-
-@Chapter = Chapter
+class @Chapter extends Cue
+    type: 'chapter'
