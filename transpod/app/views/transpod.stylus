@@ -34,7 +34,7 @@ h1:before
     margin: 0
     float: left
     border-radius: 1em
-    background-color: black
+    background: linear-gradient(top, black, black, #030)
     padding: 1em 0 3em
     border: 5px solid #272
 
@@ -42,7 +42,7 @@ h1:before
     width: 25em
     margin-left: 27em
     border-radius: 1em
-    background-color: black
+    background: linear-gradient(top, black, black, #320)
     padding: 1em 0
     border: 5px solid #972
 
@@ -93,7 +93,7 @@ h2
     cursor: pointer
     font-size: 140%
     color: black
-    background: linear-gradient(top, #aaa, #ddd, #fff, #fff, #ddd, #ccc, #aaa, #777, #333)
+    background: linear-gradient(top, #777, #ddd, #fff, #ccc, #666)
     padding: 2px 8px 4px
     margin: 0 0 0 2px
     border: 1px solid #333
@@ -147,3 +147,11 @@ h3
     overflow: hidden
     height: 1.2em
 
+.chapter
+    background: #d1e linear-gradient(top, #e6f, #fff 40%, #faf 70%, #d1e)
+.transcription
+    background: #cd0 linear-gradient(top, #ef6, #fff 40%, #ffa 70%, #cd0)
+.note
+    background: #283 linear-gradient(top, #6ef, #fff 40%, #aff 70%, #28e)
+.comment
+    background: #b72 linear-gradient(top, #fe6, #fff 40%, #fca 70%, #b72)
