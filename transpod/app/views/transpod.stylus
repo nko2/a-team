@@ -22,6 +22,57 @@ h1:before
     font-weight: bold
     color: red
 
+#welcome
+    width: 53em
+    padding: 0
+    margin: 0 auto
+
+#fresh
+    width: 25em
+    margin: 0
+    float: left
+    border-radius: 1em
+    background-color: black
+    padding: 1em 0
+    border: 5px dotted #222
+
+#top10
+    width: 25em
+    margin-left: 27em
+    border-radius: 1em
+    background-color: black
+    padding: 1em 0
+    border: 5px dashed #222
+
+#fresh > *, #top10 > *
+    margin: 0.5em 2em
+    padding: 0
+
+h2
+    font-size: 100%
+    color: #ccc
+
+#fresh form
+    background-color: #4c4
+    padding: 0.2em 0.5em
+    border-radius: 0.5em
+
+#fresh form input[type='text']
+    width: 15em
+
+#fresh form input[type='submit']
+    width: 7em
+    font-weight: bold
+    text-align: center
+
+#top10 ul
+    list-style-type: none
+
+.hint
+    color: #777
+    font-size: 75%
+    text-align: center
+
 .button
     font-size: 140%
     color: black

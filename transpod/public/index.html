@@ -3,6 +3,7 @@
 <head>
 <title>Transpod podcast crowd transcription</title>
 <link rel="stylesheet" href="/css.css">
+<script src="/jquery.js"></script>
 <script src="/backbone.js"></script>
 <script src="/app.js"></script>
 </head>
@@ -16,7 +17,33 @@ You, Sir, need to enable JavaScript!
 </p>
 </noscript>
 
+<div id="welcome">
+<div id="fresh">
+  <h2>Enter a Podcast recording:</h2>
+  <form>
+  <input type="text" id="fresh_url" placeholder="http://.../podcast.mp3">
+  <input type="submit" id="fresh_ok" value="Annotate!">
+  </form>
+  <p class="hint">
+  Please paste a direct HTTP link to the audio file.
+  </p>
+</div>
 
+<div id="top10">
+  <h2>Top Annotated Podcasts</h2>
+  <ul>
+    <li><a>SUPER GREG, NUMBA ONE!</a></li>
+    <li><a>Pentacast</a></li>
+    <li><a>Pentaradio</a></li>
+    <li><a>Pentacast</a></li>
+    <li><a>Pentaradio</a></li>
+    <li><a>Pentacast</a></li>
+    <li><a>Pentaradio</a></li>
+    <li><a>Pentacast</a></li>
+    <li><a>Pentaradio</a></li>
+  </ul>
+</div>
+</div>
 
 <div id="content" style="width: 3200px;">
   <a id="play" class="button">▶</a>
