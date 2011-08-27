@@ -5,6 +5,8 @@
   , "keywords": []
   , "author": "A-Team <<</>>"
   , "dependencies": {
+      "express" : "*",
+      "connect" : "*",
       "backbone" :"*",
       "backbone-couch" : "*",
       "cluster" : "*",

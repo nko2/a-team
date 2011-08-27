@@ -24,4 +24,4 @@ clean:
 test:
 	@echo "populate me"
 
-.PHONY: test
+.PHONY: test server
