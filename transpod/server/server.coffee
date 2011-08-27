@@ -5,6 +5,7 @@ fs = require('fs')
 express = require('express')
 app = express.createServer()
 colors = require('colors')
+connect = require('connect')
 
 # Config
 app.set('views', __dirname + '/app/views')
@@ -12,13 +13,18 @@ app.set('views', __dirname + '/app/views')
 app.set('view engine', 'html')
 
 app.configure () ->
+    console.log(__dirname)
+    app.use(express.logger())
     app.use(express.bodyParser())
     app.use(express.methodOverride())
     app.use(express.cookieParser())
-    app.use(express.static(__dirname + '/public'))
+    app.use(express.static(__dirname + '../public'))
     app.use(app.router)
     app.use(express.errorHandler({dumpExceptions: true, showStack: true}))
 
+    connect.router (app) ->
+       app.get '/user/:id', (req, res, next) ->
+           console.log(res)
 
 # Resources
 ###
