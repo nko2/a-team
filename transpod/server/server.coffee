@@ -8,10 +8,12 @@ colors = require('colors')
 connect = require('connect')
 Backbone = require('backbone')
 Routes = require('./routes')
-io = require('socket.io')
+sio = require('socket.io')
 rpc = require('./rpc')
+browserify = require('browserify')
+path = require('path')
 
-app = express.createServer() #io)
+app = express.createServer()
 
 couch = require('backbone-couch')
     host: '127.0.0.1',
@@ -37,7 +39,24 @@ app.configure () ->
 
     app.enable('log')
     console.log(rpc)
-    app.on 'connection', rpc
+
+    public_path = path.join(__dirname, '..', 'public')
+    javascript = browserify
+        require: [
+               'underscore'
+                'backbone'
+                path.join(public_path, 'app')
+                jquery:'jquery-browserify'
+                ]
+        fastmatch: true
+
+    backbone = path.join(__dirname, '..', '..', "node_modules", "backbone", "backbone.js")
+    javascript.register 'pre', ->
+        @files[backbone].body = @files[backbone].body.replace(
+            "var module = { exports : {} };",
+            "var module = { exports : {_:window._, jQuery:window.$} };")
+
+    app.use javascript
 
     # Create database, push default design documents to it and
     # assign sync method to Backbone.
@@ -48,37 +67,13 @@ app.configure () ->
     Routes(app)
 
     app.use(app.router)
-# Resources
-###
-bootResources(app) ->
-  fs.readdir(__dirname + '/app/resource', (err, files){
-    if (err) { throw err; }
-    files.forEach((file) ->
-      if ((file.indexOf("~") > -1) || (file.indexOf(".svn") > -1))
-        return;
-      }
-
-      var name = file.replace('.js', '')
-        , Res = require('./app/resource/' + name);
-
-      if (typeof Res !== 'function') {
-        return; // since this isn't a resource
-      }
-
-      if (typeof Res.prototype.route !== 'function') {
-        return; // since this isn't a resource
-      }
-
-      var r = new Res();
-      r.route(app);
-    });
-  });
-}
-bootResources(app)
-###
-
-if !module.parent
+    
     app.listen(PORT)
+    
+    # setup socket.io
+    io = sio.listen(app)
+    
+    app.on 'connection', rpc
     console.log('App started on port: ' + PORT)
 
 
