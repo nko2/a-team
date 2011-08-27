@@ -18,6 +18,7 @@ MemoryStore = require('connect/lib/middleware/session/memory')
 session_store = new MemoryStore()
 cradle = require('cradle')
 design = require('./design')
+kue = require('kue')
 
 app = express.createServer()
 
@@ -30,6 +31,8 @@ config.db = db = new(cradle.Connection)({
     cache: true,
     raw: false
 }).database('transpod')
+
+config.jobs = kue.createQueue()
 
 
 #app = app.listen(PORT)
