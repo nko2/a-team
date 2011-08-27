@@ -2,11 +2,18 @@ WaveformView = require('./waveform')
 CueView = require('./cue')
 { Podcast } = require('../models/podcast')
 { Cue } = require('../models/cue')
+Backbone = require('backbone')
 
 class ContentView extends Backbone.View
     initialize: (url) ->
-        @podcast = new Podcast({ url })
-        #@podcast.save()
+        @podcast = new Podcast( url: url )
+        @podcast.get('cues').bind 'add', (cue) =>
+            view = new CueView @, cue
+            @cueViews.push view
+            if @cueToEdit is cue
+                view.editText()
+                delete @cueToEdit
+        @podcast.fetch()
 
         @el = $('#content')
         @delegateEvents()
@@ -27,7 +34,7 @@ class ContentView extends Backbone.View
 
         @waveform = new WaveformView()
 
-        @cues = [
+        @cueViews = [
             # STUBS:
             new CueView(@, new Cue(type: 'comment', start: 10, end: 20)),
             new CueView(@, new Cue(type: 'chapter', start: 0, end: 305)),
@@ -80,14 +87,14 @@ class ContentView extends Backbone.View
         @el.scrollLeft fullWidth * @zoomStart / @length
 
         # Move cues around:
-        for cue in @cues
-            @moveCue cue
+        for view in @cueViews
+            @moveCue view
 
-    moveCue: (cue) ->
+    moveCue: (view) ->
         fullWidth = @getFullWidth()
-        left = fullWidth * cue.model.get('start') / @length
-        width = fullWidth * (cue.model.get('end') - cue.model.get('start')) / @length
-        cue.moveTo(Math.floor(left), Math.ceil(width), categoryToY(cue.model.get('type')))
+        left = fullWidth * view.model.get('start') / @length
+        width = fullWidth * (view.model.get('end') - view.model.get('start')) / @length
+        view.moveTo(Math.floor(left), Math.ceil(width), categoryToY(view.model.get('type')))
 
     setZoomToScroll: ->
         fullWidth = @getFullWidth()
@@ -133,18 +140,22 @@ class ContentView extends Backbone.View
 
     dragStop: (ev) ->
         ev.preventDefault()
-        delete @dragging
+        if @dragging
+            cue = @dragging.cue.model
+            # First remove
+            delete @dragging
+            # Then attempt syncing
+            cue.save()
 
     pointCreate: (ev) ->
         ev.preventDefault()
         type = yToCategory(ev.offsetY or ev.layerY)
         t = @length * ((ev.offsetX or ev.layerX) + @el.scrollLeft()) / @getFullWidth()
         if type
-            # TODO: only add to collection, let handler add it
-            cue = new CueView(@, new Cue(type: type, start: t, end: t + 10))
-            @cues.push cue
-            @moveCue cue
-            cue.editText()
+            cue = new Cue(type: type, start: t, end: t + 10)
+            @podcast.get('cues').add cue
+            @cueToEdit = cue
+            cue.save()
 
 module.exports = ContentView
 

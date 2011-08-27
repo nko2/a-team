@@ -14,6 +14,8 @@ class CueView extends Backbone.View
         'mousedown .grabstart': 'dragStart'
         'mousedown .grabend': 'dragEnd'
         'mousemove': 'drag'
+        'mouseup': 'dragStop'
+        'mouseeup .grab': 'dragStop'
         'change .text': 'textEdited'
         'textInput .text': 'textEdited'
         'keypress .text': 'textEdited'
@@ -45,5 +47,8 @@ class CueView extends Backbone.View
     drag: (ev) ->
         ev.preventDefault()
         @contentView.drag ev
+
+    dragStop: (ev) ->
+        @contentView.dragStop ev
 
 module.exports = CueView
