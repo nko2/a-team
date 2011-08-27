@@ -10,7 +10,9 @@
       "cluster" : "*",
       "kue" : "*",
       "vows" : "*",
-      "capt" : "*"
+      "capt" : "*",
+      "stylus" : "*",
+      "nko" : "*"
   }
   , "main": "index"
   , "engines": { "node": "0.4.x" }
