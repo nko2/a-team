@@ -15,7 +15,8 @@
       "capt" : "*",
       "stylus" : "*",
       "nko" : "*",
-      "coffee-script" : "*"
+      "coffee-script" : "*",
+      "colors" : "*"
   }
   , "main": "index"
   , "engines": { "node": "0.4.x" }
