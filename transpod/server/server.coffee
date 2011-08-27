@@ -23,9 +23,9 @@ couch = require('backbone-couch')
 
 
 # Config
-app.set('views', __dirname + '/app/views')
-app.register('.html', require('ejs'))
-app.set('view engine', 'html')
+#app.set('views', __dirname + '/app/views')
+#app.register('.html', require('ejs'))
+#app.set('view engine', 'html')
 
 app.configure () ->
     console.log(__dirname)
