@@ -1,8 +1,5 @@
 Backbone = require("backbone")
-{ Chapter, ChapterCollection } = require('./chapter')
-{ Note, NoteCollection } = require('./note')
-{ Comment, CommentCollection } = require('./comment')
-{ Transcription, TranscriptionCollection } = require('./chapter')
+{ Cue, CueCollection } = require('./cue')
 
 class Podcast extends Backbone.Model
   # required:
@@ -15,10 +12,7 @@ class Podcast extends Backbone.Model
 
   initialize: ->
     # ...
-    chapters = ChapterCollection
-    notes = NoteCollection
-    transcription = TranscriptionCollection
-    comments = CommentCollection
+    cues = CueCollection
 
 
 class PodcastCollection extends Backbone.Collection
