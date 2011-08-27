@@ -23,7 +23,7 @@
       "coffee-script" : "*",
       "colors" : "*",
       "eyes": "*",
-      "jquery" : "*"
+      "jquery" : "*",
       "nib" : "*"
   }
   , "main": "index"
