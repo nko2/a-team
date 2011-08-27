@@ -11,7 +11,7 @@ Routes = require('./routes')
 io = require('socket.io')
 rpc = require('./rpc')
 
-app = express.createServer(io)
+app = express.createServer() #io)
 
 couch = require('backbone-couch')
     host: '127.0.0.1',
