@@ -23,6 +23,7 @@
       "colors" : "*",
       "eyes": "*",
       "jquery" : "*"
+      "nib" : "*"
   }
   , "main": "index"
   , "engines": { "node": "0.4.x" }

@@ -1,3 +1,5 @@
+@import '../../../node_modules/nib/lib/nib/gradients'
+
 body
     font-family: sans-serif
     color: white
@@ -57,13 +59,21 @@ h2
     padding: 0.2em 0.5em
     border-radius: 0.5em
 
+#fresh form input
+    border-top: 1px solid #666
+    border-left: 1px solid #666
+    border-right: 1px solid #999
+    border-bottom: 1px solid #999
+
 #fresh form input[type='text']
     width: 15em
 
 #fresh form input[type='submit']
+    cursor: pointer
     width: 7em
     font-weight: bold
     text-align: center
+    background: linear-gradient(top, #f00, #fa0, #ff0, #3f3, #66f, #f3f)
 
 #top10 ul
     list-style-type: none
@@ -82,7 +92,7 @@ h2
     cursor: pointer
     font-size: 140%
     color: black
-    background: #ccc
+    background: linear-gradient(top, #aaa, #ddd, #fff, #fff, #ddd, #ccc, #aaa, #777, #333)
     padding: 2px 8px 4px
     margin: 0 0 0 2px
     border: 1px solid #333
