@@ -17,9 +17,8 @@ public/app.js: public/jquery.js
 	$(COFFEE) -c `find app -name \*.coffee`
 	cat app/models/cue.js `find app -name \?\*.js` > $@
 
-server: public/app.js public/css.css files
-	$(COFFEE) -c `find server -name \*.coffee`
-	cd server && node server.js
+server: 
+	coffee server/server.coffee
 
 clean:
 	rm -f public/app.js public/css.css
