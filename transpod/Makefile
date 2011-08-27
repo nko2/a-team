@@ -17,10 +17,11 @@ public/app.js: public/jquery.js
 	$(COFFEE) -c `find app -name \*.coffee`
 	cat app/models/cue.js `find app -name \?\*.js` > $@
 
-server: 
+server: public/css.css files
 	../node_modules/.bin/coffee server/server.coffee
 
 clean:
+	find app -name "*.js" -exec rm {} \;
 	rm -f public/app.js public/css.css
 
 test:
