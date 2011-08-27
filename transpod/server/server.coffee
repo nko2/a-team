@@ -73,12 +73,12 @@ app.configure () ->
     Routes(app)
 
     app.use(app.router)
-    
+
     app.listen(PORT)
-    
+
     # setup socket.io
     io = sio.listen(app)
-    
+
     app.on 'connection', rpc
     console.log('App started on port: ' + PORT)
 

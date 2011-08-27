@@ -1,4 +1,4 @@
-class @CueView extends Backbone.View
+class CueView extends Backbone.View
     initialize: (@model) ->
         @el = $('<p class="cue"></p>')
         @el.text "Hello, World"
@@ -18,3 +18,5 @@ class @CueView extends Backbone.View
                 @el.css('background-color', '#28e')
             when 'comment'
                 @el.css('background-color', '#b72')
+
+module.exports = CueView

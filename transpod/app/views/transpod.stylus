@@ -64,6 +64,7 @@ h2
     border-left: 1px solid #666
     border-right: 1px solid #999
     border-bottom: 1px solid #999
+    border-radius: 1px
 
 #fresh form input[type='text']
     width: 15em

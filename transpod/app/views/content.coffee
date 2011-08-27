@@ -1,4 +1,7 @@
-class @ContentView extends Backbone.View
+WaveformView = require('./waveform')
+CueView = require('./cue')
+
+class ContentView extends Backbone.View
     initialize: (@url) ->
         @el = $('#content')
         @delegateEvents()
@@ -113,3 +116,5 @@ class @ContentView extends Backbone.View
     emitZoomUpdate: ->
         if @onZoomUpdate
             @onZoomUpdate @zoomStart, @zoomEnd
+
+module.exports = ContentView

@@ -1,4 +1,4 @@
-class @WelcomeView extends Backbone.View
+class WelcomeView extends Backbone.View
     initialize: ->
         @el = $('#welcome')
         @delegateEvents()
@@ -15,4 +15,4 @@ class @WelcomeView extends Backbone.View
             url = @$('#fresh_url').val()
             @onUrl url
 
-module.exports = @WelcomeView
+module.exports = WelcomeView

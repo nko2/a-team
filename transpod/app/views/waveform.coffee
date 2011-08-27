@@ -1,5 +1,5 @@
 # twobit draws a nice waveform here
-class @WaveformView extends Backbone.View
+class WaveformView extends Backbone.View
     initialize: () ->
         @el = $('#waveform')
         #@canvas = @el[0].createContext...
@@ -15,3 +15,4 @@ class @WaveformView extends Backbone.View
     # time in seconds
     zoomTo: (zoomStart, zoomEnd) ->
 
+module.exports = WaveformView
