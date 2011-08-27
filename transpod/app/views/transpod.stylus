@@ -86,6 +86,7 @@ h2
 
 #content
     margin: 0 auto
+    padding: 0
     max-width: 90%
     overflow: scroll
     color: black
@@ -103,5 +104,9 @@ h2
     scrollbar-track-color: #333
 
 #content > * {
-    position: relative;
+    position: relative
 }
+
+#dummy
+    opacity: 0
+    width: 1px
