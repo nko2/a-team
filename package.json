@@ -16,7 +16,8 @@
       "stylus" : "*",
       "nko" : "*",
       "coffee-script" : "*",
-      "colors" : "*"
+      "colors" : "*",
+      "eyes": "*"
   }
   , "main": "index"
   , "engines": { "node": "0.4.x" }
