@@ -45,13 +45,14 @@ app.configure () ->
     requires = [
         'underscore'
         'backbone'
+        'socket.io-client'
         path.join(__dirname, '..', 'app/requires.coffee')
         jquery:'jquery-browserify'
     ]
     console.log requires: requires
     javascript = browserify
         require: requires
-        fastmatch: true
+        #fastmatch: true
 
     backbone = path.join(__dirname, '..', '..', "node_modules", "backbone", "backbone.js")
     javascript.register 'pre', ->

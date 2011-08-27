@@ -4,10 +4,12 @@
 <title>Transpod podcast crowd transcription</title>
 <link rel="stylesheet" href="/css.css">
 <script src="/browserify.js"  type="application/javascript"></script>
+<script src="/js/socket.io.js"  type="application/javascript"></script>
 <script type="application/javascript">
 window._ = require('underscore');
 window.$ = require('jquery');
 window.Backbone = require('backbone');
+io.connect('http://localhost:3000');
 require('./router');
 </script>
 </head>

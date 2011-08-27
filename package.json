@@ -11,6 +11,7 @@
       "express" : "*",
       "connect" : "*",
       "socket.io" : "*",
+      "socket.io-client" : "*",
       "backbone" :"*",
       "backbone-couch" : "*",
       "cluster" : "*",

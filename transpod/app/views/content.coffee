@@ -9,7 +9,7 @@ class ContentView extends Backbone.View
             @setZoomToScroll()
         @length = 600 # STUB
 
-        @audio = document.createElement('audio');
+        @audio = document.createElement('audio')
         src = document.createElement('source')
         src.setAttribute('src', @url)
         @audio.appendChild(src)
