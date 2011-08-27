@@ -3,9 +3,10 @@
 <head>
 <title>Transpod podcast crowd transcription</title>
 <link rel="stylesheet" href="/css.css">
-<script src="/jquery.js"></script>
-<script src="/backbone.js"></script>
-<script src="/app.js"></script>
+<script src="/underscore-min.js" type="application/javascript"></script>
+<script src="/jquery.js" type="application/javascript"></script>
+<script src="/backbone.js" type="application/javascript"></script>
+<script src="/app.js" type="application/javascript"></script>
 </head>
 
 <body>
@@ -21,7 +22,7 @@ You, Sir, need to enable JavaScript!
 <div id="fresh">
   <h2>Enter a Podcast recording:</h2>
   <form>
-  <input type="text" id="fresh_url" placeholder="http://.../podcast.mp3">
+  <input type="text" id="fresh_url" placeholder="http://example.com/podcast.mp3">
   <input type="submit" id="fresh_ok" value="Annotate!">
   </form>
   <p class="hint">
@@ -30,7 +31,7 @@ You, Sir, need to enable JavaScript!
 </div>
 
 <div id="top10">
-  <h2>Top Annotated Podcasts</h2>
+  <h2>Top Annotated Podcasts:</h2>
   <ul>
     <li><a>SUPER GREG, NUMBA ONE!</a></li>
     <li><a>Pentacast</a></li>
@@ -47,6 +48,8 @@ You, Sir, need to enable JavaScript!
 
 <div id="content" style="width: 3200px;">
   <a id="play" class="button">▶</a>
+  <a id="zoomin" class="button">⊕</a>
+  <a id="zoomout" class="button">⊖</a>
   <canvas id="waveform"></canvas>
 </div>
 
