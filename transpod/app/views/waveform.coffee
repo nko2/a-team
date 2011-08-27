@@ -1,9 +1,9 @@
 # twobit draws a nice waveform here
 class @WaveformView extends Backbone.View
     initialize: () ->
-        @el = $('#content')
+        @el = $('#waveform')
         #@canvas = @el[0].createContext...
-        @delegateEvents
+        @delegateEvents()
 
     events:
         'click #foo': 'foo'
