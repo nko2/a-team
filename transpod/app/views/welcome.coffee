@@ -14,3 +14,5 @@ class @WelcomeView extends Backbone.View
         if @onUrl
             url = @$('#fresh_url').val()
             @onUrl url
+
+module.exports = @WelcomeView
