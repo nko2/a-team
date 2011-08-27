@@ -12,6 +12,7 @@ sio = require('socket.io')
 rpc = require('./rpc')
 browserify = require('browserify')
 path = require('path')
+coffee = require('coffee-script')
 
 app = express.createServer()
 
@@ -56,7 +57,10 @@ app.configure () ->
             "var module = { exports : {} };",
             "var module = { exports : {_:window._, jQuery:window.$} };")
 
+    javascript.register '.coffee',  (body) ->
+         return coffee.compile(body)
     app.use javascript
+
 
     # Create database, push default design documents to it and
     # assign sync method to Backbone.
