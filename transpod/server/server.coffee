@@ -4,11 +4,14 @@ HOST = (process.env.VCAP_APP_HOST || 'localhost')
 fs = require('fs')
 express = require('express')
 eyes = require('eyes')
-app = express.createServer()
 colors = require('colors')
 connect = require('connect')
 Backbone = require('backbone')
 Routes = require('./routes')
+io = require('socket.io')
+rpc = require('./rpc')
+
+app = express.createServer(io)
 
 couch = require('backbone-couch')
     host: '127.0.0.1',
@@ -32,6 +35,9 @@ app.configure () ->
     app.use(connect.static(__dirname + '/../public/'))
     app.use(express.errorHandler({dumpExceptions: true, showStack: true}))
 
+    app.enable('log')
+    console.log(rpc)
+    app.on 'connection', rpc
 
     # Create database, push default design documents to it and
     # assign sync method to Backbone.
