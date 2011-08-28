@@ -29,14 +29,23 @@ class CueView extends Backbone.View
 
         @$('.text').hide()
         unless @form
+            if @onEdit
+                # Signal ContentView to close all other edits
+                @onEdit(@)
+
             @form = new EditForm(@model.get('text'))
             @el.append @form.el
-            @form.onOkay = (text) =>
-                @model.set text: text
-                @model.save()
-                @render()
-                @$('.text').show()
-                delete @form
+            @form.onOkay = =>
+                @editDone()
+
+    editDone: ->
+        if @form
+            @model.set text: @form.getText()
+            @form.detach()
+            delete @form
+            @model.save()
+            @render()
+            @$('.text').show()
 
     # Move whole cue
     moveTo: (left, width, top) ->
@@ -91,8 +100,13 @@ class EditForm extends Backbone.View
         if ev
             ev.preventDefault()
 
-        @el.detach()
         if @onOkay
-            @onOkay @$('.edittext').val()
+            @onOkay()
+
+    getText: ->
+        @$('.edittext').val()
+
+    detach: ->
+        @el.detach()
 
 module.exports = CueView

@@ -76,6 +76,13 @@ class ContentView extends Backbone.View
         view = new CueView @, cue
         @moveCue view
         @cueViews.push view
+        view.onEdit = =>
+            # When its clicked
+            for view1 in @cueViews
+                # All other views
+                unless view1 is view
+                    # Shall close their edit inputs
+                    view1.editDone()
         view
 
     events:
