@@ -53,16 +53,21 @@ class ContentView extends Backbone.View
         @timehints.start.hide()
         @timehints.end.hide()
 
-        @cueViews = [
-            # STUBS:
-            new CueView(@, new Cue(type: 'comment', start: 10, end: 20)),
-            new CueView(@, new Cue(type: 'chapter', start: 0, end: 305)),
-            new CueView(@, new Cue(type: 'note', start: 40, end: 60))
-        ]
+        @cueViews = []
         @realign()
 
     remotePushed: (obj) ->
         console.log 'got pushed', obj
+        if obj.type is 'podcast'
+            @podcast.set obj
+        if CATEGORIES.indexOf(obj.type) >= 0
+            found = false
+            @podcast.cues.forEach (cue) ->
+                if cue.uid is obj.uid
+                    cue.set obj
+                    found = true
+            unless found
+                @podcast.cues.add cue
 
     newCue: (cue) ->
         if _.any(@cueViews, (view) -> view.model is cue)
