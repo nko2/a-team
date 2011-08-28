@@ -53,31 +53,18 @@ class ServerPodcast extends Podcast
         return Path.join(prefix, @_id(), suffix)
 
     check: (callback) =>
-        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-        console.log(@generate_filename("mp3"))
-        checked = (exists) =>
-            
-            if not exists or @get("download") != "done"
-                console.log("path missing, downloading")
-                @download (err) =>
-                    if not err
-                        conv = new Converter(@get("sourcefile"))
-                        render = new Waveform.SeriesRenderer()
-                        render.on 'image', (png, start, stop) ->
-                            fs.writeFileSync "/tmp/transpod-#{start}-#{stop}.png", png
-                        conv.on "sample", (value) =>
-                            render.write(value)
-                            true
-
-                        conv.run (err, n) =>
-                            # after convert
-                            callback(err, true)
+        create_job = () =>
+            Config.jobs.create("download", url:@get("podurl")).save()
+            callback(null, this)
+        Path.exists @generate_filename("audio.mp3"), (exists) =>
+            if not exists
+                create_job()
             else
-                return callback(null, true)
-        if not @get("source_file")
-            checked(false)
-        else
-            Path.exists @get("source_file"), checked
+                Path.exists @generate_filename("audio.ogg"), (exists) =>
+                    if not exists
+                        create_job()
+                    else
+                        callback(null, this)
 
     download: (callback) =>
         console.log("download file")

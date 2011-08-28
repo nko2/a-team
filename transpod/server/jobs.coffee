@@ -40,13 +40,14 @@ jobs.process 'convert', 1, (job, done) ->
         source = podcast.get("source_file")
         if not source
             return done("source file missing in model")
-        dir = path.dirname(podcast.generate_filename())
+        dir = podcast.generate_filename("")
         if not path.existsSync(dir)
             fs.mkdirSync(dir)
         conv = new Converter(podcast.get("source_file"), podcast.generate_filename("audio"))
         render = new Waveform.SeriesRenderer()
         render.on 'image', (png, start, stop) ->
-            fs.writeFileSync "/tmp/transpod-#{start}-#{stop}.png", png
+            console.log(path.join(dir, "uv-#{start}-#{stop}.png"))
+            fs.writeFileSync path.join(dir, "uv-#{start}-#{stop}.png"), png
         conv.on "sample", (value) =>
             render.write(value)
         conv.run (err, n) =>
