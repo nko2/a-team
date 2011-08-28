@@ -13,7 +13,8 @@ public/css.css:
 public/jquery.js:
 	cp ../node_modules/jquery/dist/node-jquery.min.js $@
 
-public/app.js: public/jquery.js
+compile:
+	$(COFFEE) -c `find server -name \*.coffee`
 	$(COFFEE) -c `find app -name \*.coffee`
 	cat app/models/cue.js `find app -name \?\*.js` > $@
 
@@ -26,6 +27,7 @@ server: public/css.css files public/js/socket.io.js
 
 clean:
 	find app -name "*.js" -exec rm {} \;
+	find server -name "*.js" -exec rm {} \;
 	rm -f public/app.js public/css.css
 
 test:
