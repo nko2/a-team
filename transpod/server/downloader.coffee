@@ -8,7 +8,7 @@ trim = (nam) ->
     return nam.replace(/^\s+|\s+$/g, '')
 
 safe_name = (url) ->
-    return querystring.escape(url).replace(/\%/g,"_")
+    return querystring.escape(url).replace(/[\%\/\\\,]/g,"_")
 
 
 regExp = new RegExp('\\d{0,}%','i')
