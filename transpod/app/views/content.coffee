@@ -351,7 +351,7 @@ class ContentView extends Backbone.View
                 view = @getWaveView t, t+detail
                 left = @getFullWidth() * view.start / @length
                 width = @getFullWidth() * (view.end - view.start) / @length
-                fits &&= width <= WAVE_WIDTH
+                fits ||= width <= WAVE_WIDTH
                 view.el.css('left', "#{Math.floor left}px").
                     css('width', "#{Math.floor width}")
                 view.el
