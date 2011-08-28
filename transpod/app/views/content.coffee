@@ -82,6 +82,7 @@ class ContentView extends Backbone.View
         'mousedown #waveform': 'seekStart'
         'mousemove #waveform': 'seekMove'
         'mouseup #waveform': 'seekStop'
+        'click #center': 'zoomCenter'
 
     mouseup: (ev) ->
         @dragStop ev
@@ -111,12 +112,21 @@ class ContentView extends Backbone.View
         ev.preventDefault()
         @startZooming -0.02
 
+    zoomCenter: (ev) ->
+        ev.preventDefault()
+        if isNaN(@audio.currentTime)
+            return
+
+        zoomSpan = @zoomEnd - @zoomStart
+        @zoomTo @audio.currentTime - zoomSpan / 2, @audio.currentTime + zoomSpan / 2
+
     getFullWidth: ->
         winWidth = @el.innerWidth()
         zoomSpan = @zoomEnd - @zoomStart
         Math.ceil(winWidth * @length / zoomSpan)
 
     zoomTo: (@zoomStart, @zoomEnd) ->
+        console.log "zoomTo", @zoomStart, @zoomEnd
         # Normalize first
         if isNaN(@zoomStart)
             @zoomStart = 0
@@ -231,9 +241,18 @@ class ContentView extends Backbone.View
         ev.preventDefault()
         type = yToCategory(ev.offsetY or ev.layerY)
         t = @length * ((ev.offsetX or ev.layerX) + @el.scrollLeft()) / @getFullWidth()
+        switch type
+            when 'chapter'
+                l = 60
+            when 'transcript'
+                l = 10
+            when 'note'
+                l = 5
+            else
+                l = 1
         if type
-            view = @newCue new Cue(type: type, start: t, end: t + 10, podcast: @url)
-            view.editText()
+            view = @newCue new Cue(type: type, start: t, end: t + l, podcast: @url)
+            view.clickEdit()
 
     clickPlay: (ev) ->
         ev.preventDefault()

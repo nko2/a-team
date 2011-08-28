@@ -95,7 +95,7 @@ h2
     overflow: auto
     color: black
     background-color: #777
-    min-height: 30em
+    min-height: 400px
 
     border-radius: 6px
     box-shadow: 0 4px 24px black
@@ -128,7 +128,7 @@ h2
 .button:hover
     border: 1px solid white
     color: white
-    background-color: #333
+    background: linear-gradient(top, #777, #666, #333, #666, #999)
 
 #waveform
     background-color: #226
@@ -183,6 +183,8 @@ h2
 .cue .text
     padding: 0.3em 3px
     display: block
+.cue .text.hidden
+    display: none
 .cue .edit
     display: none
 .cue:hover .edit
@@ -190,13 +192,15 @@ h2
     cursor: pointer
     position: absolute
     top: 0.1em
-    right: 1px
+    right: 3px
     color: #060
     font-weight: bolder
     font-size: 130%
 .cue .edit:hover
     color: black
-    text-shadow: 1px 1px 1px black
+    text-shadow: 1px 1px 0 black
+.cue .edit.hidden:hover
+    display: none
 
 .chapter
     background: #d1e linear-gradient(top, #e6f, #fff 40%, #faf 70%, #d1e)
@@ -216,6 +220,8 @@ h2
     padding: 0
     margin: 0
     opacity: 0.5
+    // Above edit
+    z-index: 2
 .grab:hover
     background-color: #fff
     opacity: 1
@@ -231,3 +237,29 @@ h2
     font-weight: bolder
     opacity: 0.7
     font-size: 70%
+
+.cue input
+     padding: 0
+     margin: 0
+
+.cue .edittext
+    position: relative
+    left: 1px
+    top: 2px
+    padding: 0
+    text-size: 75%
+
+.cue .editok
+    cursor: pointer
+    position: relative
+    top: 2px
+    right: -3px
+    text-size: 75%
+    font-weight: bold
+    background: linear-gradient(top, #777, #ddd, #fff, #ccc, #666)
+    padding: 0 2px 2px
+    border: 1px solid #333
+.cue .editok:hover
+    border: 1px solid white
+    color: white
+    background: linear-gradient(top, #777, #666, #333, #666, #999)

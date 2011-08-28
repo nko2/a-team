@@ -17,8 +17,8 @@
    inkscape:version="0.48.1 r9760"
    sodipodi:docname="transpod.svg"
    inkscape:export-filename="transpod.png"
-   inkscape:export-xdpi="66.599915"
-   inkscape:export-ydpi="66.599915">
+   inkscape:export-xdpi="64.581734"
+   inkscape:export-ydpi="64.581734">
   <metadata
      id="metadata34">
     <rdf:RDF>
@@ -40,11 +40,11 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1186"
+     inkscape:window-width="1436"
      inkscape:window-height="877"
      id="namedview32"
      showgrid="false"
-     inkscape:zoom="1.84375"
+     inkscape:zoom="3.6875"
      inkscape:cx="175.91328"
      inkscape:cy="95.134599"
      inkscape:window-x="0"
@@ -773,26 +773,6 @@
      id="rect3181"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccc" />
-  <path
-     transform="matrix(2.104405,0,0,3.4373973,-17.759547,-547.68353)"
-     d="m 212.0678,251.38983 a 80.81356,16.542374 0 1 1 -161.627119,0 80.81356,16.542374 0 1 1 161.627119,0 z"
-     sodipodi:ry="16.542374"
-     sodipodi:rx="80.81356"
-     sodipodi:cy="251.38983"
-     sodipodi:cx="131.25424"
-     id="path4710"
-     style="fill:url(#radialGradient4712);fill-opacity:1;fill-rule:nonzero;stroke:none"
-     sodipodi:type="arc" />
-  <path
-     sodipodi:type="arc"
-     style="fill:url(#radialGradient3707);fill-opacity:1;fill-rule:nonzero;stroke:none"
-     id="path3697"
-     sodipodi:cx="131.25424"
-     sodipodi:cy="251.38983"
-     sodipodi:rx="45.961624"
-     sodipodi:ry="5.181788"
-     d="m 177.21587,251.38983 a 45.961624,5.181788 0 1 1 -91.923252,0 45.961624,5.181788 0 1 1 91.923252,0 z"
-     transform="matrix(2.104405,0,0,3.4373973,-30.686171,-530.00987)" />
   <path
      inkscape:connector-curvature="0"
      style="fill:url(#linearGradient3179);fill-opacity:1;fill-rule:evenodd;stroke:none"
