@@ -110,6 +110,7 @@ def on_eos(bus, msg):
     global pipeline
     pipeline.set_state(gst.STATE_NULL)
     log('on_eos')
+    return
     print("convert image")
     import matplotlib
     matplotlib.use( 'Agg' )

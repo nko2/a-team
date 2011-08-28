@@ -156,9 +156,9 @@ class ServerPodcast extends Podcast
 
     _merge_save: (callback) =>
         Config.db.get @_id(), (err, res) =>
-            console.log("_merge save", err, res)
+            #console.log("_merge save", err, res)
             doc = @filteredJSON()
-            console.log("this doc", doc)
+            #console.log("this doc", doc)
             if res
                 for key, value of res
                     if doc[key] == undefined
@@ -172,13 +172,14 @@ class ServerPodcast extends Podcast
                 # copy current source
                 if res
                     for own key, value of res[c]
+                        
                         nv[key] = value
                 for own key, value of @get(c)
                     nv[key] = value
-
+                #console.log("merged type" + c, nv)
                 doc[c] = nv
                 @set c:nv
-            #console.log("done", doc)
+            console.log("merge done", doc)
             Config.db.save @_id(), doc._rev, doc, (err, res) =>
                 #console.log("config merge save", err, res)
                 if res and res[0] and res[0].rev
