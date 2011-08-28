@@ -7,49 +7,16 @@ check = require('validator').check
 
 console.log(ServerPodcast, ServerPodcastCollection)
 
-# ♥
-podcastListeners = {}
-podcast_collections = new ServerPodcastCollection
-
-class User
-    constructor: ->
-        @myUrls = []
-
-    push: (obj) ->
-        if @onPush
-            @onPush obj
-
-    shutdown: ->
-        # Unsubscribe
-        for url in @myUrls
-            podcastListeners[url] =
-                podcastListeners[url].filter (user) =>
-                    user isnt @
-            if podcastListeners[url].length < 0
-                delete podcastListeners[url]
-
-    get: (url) ->
-        # Subscribe
-        unless podcastListeners[url]?
-            podcastListeners[url] = []
-        podcastListeners[url].push @
-
-        # Fetch
-
-    addCue: (obj) ->
 
 rpc_handler = (io) ->
     io.of('/podcast').on 'connection', (socket) ->
-        user = new User()
-        user.onPush = (obj) ->
-            socket.emit 'push', obj
+        console.log 'client connection', socket
 
         socket.on 'list', (start, stop) ->
             console.log("list podcasts")
 
         socket.on 'get', (url) ->
             console.log("get podcast url:", url)
-            user.get url
 
             try
                 url = url.url
@@ -122,7 +89,7 @@ rpc_handler = (io) ->
                 vars[typename] = cue
                 obj.set(vars)
 
-                
+
                 unless err
                     socket.emit 'push', obj.toJSON()
                 obj.save()
