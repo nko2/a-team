@@ -49,15 +49,16 @@ def parse_msg(bus, msg):
             #get the values of rms in a list
             rms0 = abs(float(rms[0]))
             #compute for rms to decibels
-            print rms0
-            return
+            #print rms0
+            #return
             rmsdb = 10 * math.log(rms0 / 32768 )
             #print rmsdb
             #compute for progress bar
             #print struc["stream-time"]
             vlrms = (rmsdb-MIN_DB) * 100 / (MAX_DB-MIN_DB)
-            data_x.append(struc["stream-time"])
-            data_y.append(rms0)
+            print vlrms
+            #data_x.append(struc["stream-time"])
+            #data_y.append(rms0)
 
 
 def write_file():
