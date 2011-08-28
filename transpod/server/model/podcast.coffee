@@ -14,8 +14,7 @@ BufferStream = require('bufferstream')
 
 
 safe_url = (url) ->
-    return query.escape(url).replace(/\%/g,"_")
-
+    return query.escape(url).replace(/[\%\/\\\,]/g,"_")
 
 
 class ServerCue extends Cue
@@ -42,13 +41,16 @@ class Converter extends EventEmitter
 
 
 class ServerPodcast extends Podcast
+
     filename: (typ) =>
         rv = Path.join(Config.podcast_data, @id, typ)
         return rv
 
-    generate_filename: (suffix) =>
+    generate_filename: (suffix, prefix) =>
         suffix = suffix or ""
-        return Path.join(Config.static_dir, @_id(), "audio" + suffix)
+        if prefix == undefined
+            prefix = Config.static_dir
+        return Path.join(prefix, @_id(), suffix)
 
     check: (callback) =>
         console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
@@ -168,12 +170,15 @@ class ServerPodcast extends Podcast
             throw new Error("podurl is required")
         changed = @changedAttributes()
         #console.log("changed", changed)
+        @set prefix:@generate_filename("", "")
         data = @filteredJSON()
         data["_id"] = @_id()
         data["type"] = "podcast"
         is_new = not data["_rev"]
         data["id"] = data["name"] = @get("podurl")
         #console.log("data", data, @_id())
+
+
         #console.log "ServerPodcast", @
         if is_new
             Config.db.save [data], data, (err, res) =>
