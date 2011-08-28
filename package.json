@@ -24,7 +24,8 @@
       "eyes": "*",
       "jquery" : "*",
       "nib" : "*",
-      "validator" : "*"
+      "validator" : "*",
+      "png": "*"
   }
   , "main": "index"
   , "engines": { "node": "0.4.x" }
