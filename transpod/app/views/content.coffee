@@ -21,6 +21,8 @@ class ContentView extends Backbone.View
             @realign()
         $(window).scroll =>
             @realign()
+        $(window).resize =>
+            @zoomTo @zoomStart, @zoomEnd
         @length = 600 # STUB
 
         @audio = document.createElement('audio')
@@ -28,7 +30,9 @@ class ContentView extends Backbone.View
         src.setAttribute('src', @url)
         @audio.appendChild(src)
         @audio.addEventListener 'load', =>
-            @length = @audio.duration
+            if @audio.duration
+                @length = @audio.duration
+                @zoomTo @zoomStart, @zoomEnd
         @audio.addEventListener 'playing', =>
             @$('#play').text "▮▮"
             @startPlayTimer()
@@ -128,11 +132,20 @@ class ContentView extends Backbone.View
         for view in @cueViews
             @moveCue view
 
+        @updateSeeker()
+
     moveCue: (view) ->
         fullWidth = @getFullWidth()
         left = fullWidth * view.model.get('start') / @length
         width = fullWidth * (view.model.get('end') - view.model.get('start')) / @length
         view.moveTo(Math.floor(left), Math.ceil(width), categoryToY(view.model.get('type')))
+
+    updateSeeker: ->
+        if isNaN(@audio.currentTime)
+            left = -1
+        else
+            left = @getFullWidth() * @audio.currentTime / @length
+        @$('#seeker').css('left', "#{Math.floor left}px")
 
     setZoomToScroll: ->
         fullWidth = @getFullWidth()
@@ -145,7 +158,6 @@ class ContentView extends Backbone.View
 
     realign: ->
         # Fixed stuff:
-        left = @el.scrollLeft()
         top = $(window).scrollTop() + @el.scrollTop()
         @$('#waveform').css('top', "#{148 - top}px")
         @$('#buttons').css('top', "#{278 - top}px")
@@ -225,6 +237,9 @@ class ContentView extends Backbone.View
 
     startPlayTimer: ->
         @$('#playtime').text Timefmt.toString(@audio.currentTime)
+        # Maybe scroll?
+        @updateSeeker()
+
         unless @audio.paused or @playTimer
             @playTimer = setTimeout =>
                 delete @playTimer

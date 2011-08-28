@@ -150,6 +150,14 @@ h2
     border-right: 1px solid #fff
     z-index: 9
 
+#seeker
+    top: 8px
+    height: 128px
+    width: 1px
+    background-color: #ffa
+    z-index: 10
+    
+
 #dummy
     width: 1px
 
@@ -170,6 +178,7 @@ h2
     height: 1.6em
     overflow: hidden
     white-space: nowrap
+    box-shadow: 2px 2px 0 #333
 .cue .text
     padding: 0.3em 3px
     display: block
