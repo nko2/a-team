@@ -44,9 +44,12 @@ tests = vows.describe('download tests').addBatch [
         topic: () ->
             c = new Converter("../podcast_data/http_3A_2F_2Fphobos.hq.c3d2.de_2Fpentaradio-2011-07-26.mp3")
             callback = this.callback
+            v = 0
             c.on "sample", (sample) ->
                 #console.log("sample", sample)
-                process.stdout.write('.')
+                v += 1
+                if (v % 100) == 0
+                    process.stdout.write('.')
             c.run (err, x) ->
                 console.log("converter done")
                 callback(err, x)
