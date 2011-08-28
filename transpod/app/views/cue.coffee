@@ -3,7 +3,7 @@ class CueView extends Backbone.View
         @el = $('<p class="cue"><span class="grab grabstart" title="Drag to change cue start">&nbsp;</span><span class="text" title="Edit cue text. Clear all to remove."></span><span class="grab grabend" title="Drag to change cue end">&nbsp;</span></p>')
         @$('.text').text @model.get('text')
         if @model.get('type') isnt 'comment'
-            @el.append('<a class="edit" title="Edit">☑</a>')
+            @el.append('<a class="edit" title="Edit">✎</a>')
         $('#content').append(@el)
 
         super()
