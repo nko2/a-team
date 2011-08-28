@@ -25,9 +25,6 @@ class PodcastCollection extends Backbone.Collection
                 console.log("get data", data)
 
 
-    get_url: (url) =>
-        @socket_io.emit("get", {"url": url})
-
 @Podcast = Podcast
 @PodcastCollection = PodcastCollection
 

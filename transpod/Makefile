@@ -18,11 +18,7 @@ compile:
 	$(COFFEE) -c `find app -name \*.coffee`
 	cat app/models/cue.js `find app -name \?\*.js` > $@
 
-public/js/socket.io.js:
-	node ../node_modules/socket.io-client/bin/builder.js
-	cp ../node_modules/socket.io-client/dist/socket.io.js public/js
-
-server: public/css.css files public/js/socket.io.js
+server: public/css.css files
 	../node_modules/.bin/coffee server/server.coffee
 
 clean:
