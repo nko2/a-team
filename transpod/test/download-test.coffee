@@ -50,10 +50,10 @@ tests = vows.describe('download tests').addBatch [
             v = 0
             render = new Waveform.SeriesRenderer()
             render.on 'image', (png, start, stop) ->
+                console.log "image #{png.length} bytes, #{start}..#{stop}"
                 fs.writeFileSync "/tmp/transpod-#{start}-#{stop}.png", png
-            console.log("jo") 
+            console.log("jo")
             c.on "sample", (value) =>
-                console.log 'render write', value
                 render.write(value)
                 v += 1
                 if (v % 100) == 0

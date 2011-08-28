@@ -27,10 +27,12 @@ class Converter extends EventEmitter
         child = spawn("./transcoder/transcode.py", [@sourcefile, @outpath])
 
         child.stdout.on 'data', (data) =>
+            child.stdout.pause()
             data = data.toString('ascii')
             lines = data.split("\n")
             for line in lines
                 @emit("sample", Number(line))
+            child.stdout.resume()
         child.stderr.on 'data', (data) ->
             console.log data
 
