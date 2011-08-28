@@ -4,14 +4,17 @@ body
     font-family: sans-serif
     color: white
     background-color: #333
+    margin: 0
+    padding: 0
 
 h1
     margin: 0 auto
+    padding: 0
     text-align: center
-    font-size: 600%
+    font-size: 80px
     font-weight: bolder
     font-variant: small-caps
-    min-height: 132px
+    min-height: 80px
     text-shadow: 4px 4px 0 black
 
 h1:before
@@ -95,7 +98,8 @@ h2
     overflow: auto
     color: black
     background-color: #777
-    min-height: 400px
+    min-height: 500px
+    top: 132px
 
     border-radius: 6px
     box-shadow: 0 4px 24px black
@@ -104,7 +108,10 @@ h2
     position: absolute
 
 #buttons
-    left: 8%
+    right: 8%
+    top: 72px
+    font-size: 20px
+    height: 28px
     content: overflow
     min-width: 10em
     position: fixed
@@ -132,7 +139,7 @@ h2
 
 #waveform
     background-color: #226
-    top: 148px
+    top: 142px
     height: 128px
     position: fixed
     width: 90%
@@ -152,7 +159,7 @@ h2
     z-index: 9
 
 #seeker
-    top: 8px
+    top: 10px
     height: 128px
     width: 1px
     background-color: #ffa
@@ -177,35 +184,17 @@ h2
     background-color: white
     border: 1px solid black
     font-size: 90%
-    height: 1.6em
+    height: 2em
     overflow: hidden
     white-space: nowrap
     box-shadow: 2px 2px 0 #333
 .cue .text
-    padding: 0.3em 3px
+    padding: 0.5em 3px
     display: block
-.cue .text.hidden
-    display: none
-.cue .edit
-    display: none
-.cue:hover .edit
-    display: inline
-    cursor: pointer
-    position: absolute
-    top: 0.1em
-    right: 3px
-    color: #060
-    font-weight: bolder
-    font-size: 130%
-.cue .edit:hover
-    color: black
-    text-shadow: 1px 1px 0 black
-.cue .edit.hidden:hover
-    display: none
 
 .chapter
     background: #d1e linear-gradient(top, #e6f, #fff 40%, #faf 70%, #d1e)
-.transcription
+.transcript
     background: #cd0 linear-gradient(top, #ef6, #fff 40%, #ffa 70%, #cd0)
 .note
     background: #283 linear-gradient(top, #6ef, #fff 40%, #aff 70%, #28e)
@@ -240,27 +229,9 @@ h2
     font-size: 70%
 
 .cue input
-     padding: 0
-     margin: 0
-
-.cue .edittext
     position: relative
-    left: 1px
-    top: 2px
+    top: 0.4em
+    left: 4px
     padding: 0
-    text-size: 75%
+    border: 1px dotted #333
 
-.cue .editok
-    cursor: pointer
-    position: relative
-    top: 2px
-    right: -3px
-    text-size: 75%
-    font-weight: bold
-    background: linear-gradient(top, #777, #ddd, #fff, #ccc, #666)
-    padding: 0 2px 2px
-    border: 1px solid #333
-.cue .editok:hover
-    border: 1px solid white
-    color: white
-    background: linear-gradient(top, #777, #666, #333, #666, #999)

@@ -76,6 +76,13 @@ class ContentView extends Backbone.View
         view = new CueView @, cue
         @moveCue view
         @cueViews.push view
+        view.onEdit = =>
+            # When its clicked
+            for view1 in @cueViews
+                # All other views
+                unless view1 is view
+                    # Shall close their edit inputs
+                    view1.editDone()
         view
 
     events:
@@ -184,10 +191,10 @@ class ContentView extends Backbone.View
     realign: ->
         # Fixed stuff:
         top = $(window).scrollTop() + @el.scrollTop()
-        @$('#waveform').css('top', "#{148 - top}px")
-        @$('#buttons').css('top', "#{278 - top}px")
+        @$('#waveform').css('top', "#{142 - top}px")
+        @$('#buttons').css('top', "#{72 - top}px")
         @$('h3').each (i) ->
-            $(@).css('top', "#{122 - top + categoryToY(i)}px")
+            $(@).css('top', "#{108 - top + categoryToY(i)}px")
 
     emitZoomUpdate: ->
         if @onZoomUpdate
@@ -247,7 +254,7 @@ class ContentView extends Backbone.View
     pointCreate: (ev) ->
         ev.preventDefault()
         type = yToCategory(ev.offsetY or ev.layerY)
-        t = @length * ((ev.offsetX or ev.layerX) + @el.scrollLeft()) / @getFullWidth()
+        start = @length * ((ev.offsetX or ev.layerX) + @el.scrollLeft()) / @getFullWidth()
         switch type
             when 'chapter'
                 l = 60
@@ -257,8 +264,18 @@ class ContentView extends Backbone.View
                 l = 5
             else
                 l = 1
+        end = start + l
         if type
-            view = @newCue new Cue(type: type, start: t, end: t + l, podcast: @url)
+            # Is there any overlapping with the same type?
+            console.log { start,end,type }
+            for view1 in @cueViews
+                console.log view1
+                if type is view1.model.get('type') and
+                   start < view1.model.get('start') and
+                   end > view1.model.get('start')
+                    end = view1.model.get('start')
+            # Go
+            view = @newCue new Cue(type: type, start: start, end: end, podcast: @url)
             view.clickEdit()
 
     clickPlay: (ev) ->
@@ -296,15 +313,17 @@ class ContentView extends Backbone.View
 
 module.exports = ContentView
 
-CATEGORIES = ['chapter', 'transcription', 'note', 'comment']
+CATEGORIES = ['chapter', 'transcript', 'note', 'comment']
+CATEGORIES_OFFSET = 10 + 128 + 10 + 28
+CATEGORY_HEIGHT = 64
 
 categoryToY = (category) ->
     if typeof category is 'string'
         i = Math.max 0, CATEGORIES.indexOf(category)
     else
         i = category
-    192 + 48 * i
+    CATEGORIES_OFFSET + CATEGORY_HEIGHT * i
 
 yToCategory = (y) ->
-    y -= 192
-    CATEGORIES[Math.floor(y / 48)]
+    y -= CATEGORIES_OFFSET
+    CATEGORIES[Math.floor(y / CATEGORY_HEIGHT)]
