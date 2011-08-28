@@ -56,10 +56,6 @@ class ServerPodcast extends Podcast
         unless @get('podurl')
             throw "Initialized ServerPodcast without podurl (arguments=#{args.join(', ')})"
 
-    filename: (typ) =>
-        rv = Path.join(Config.podcast_data, @id, typ)
-        return rv
-
     generate_filename: (suffix, prefix) =>
         suffix = suffix or ""
         if prefix == undefined
@@ -86,16 +82,21 @@ class ServerPodcast extends Podcast
         @set(status:"download")
 
         nd = new Downloader
-        console.log(Config.podcast_data)
         nd.download(@get("podurl")) #Url.parse(@get("podurl")).href)
         vars = {}
         vars.source_file = nd.outfile
         @set(vars)
 
+        try
+            console.log "mkdir #{@generate_filename()}"
+            fs.mkdirSync @generate_filename(), 0644
+        catch e
+            console.error e.stack or e
         conv = new Converter(@generate_filename("", ""))
         render = new Waveform.SeriesRenderer()
-        render.on 'image', (png, start, stop) ->
-            fs.writeFileSync "/tmp/transpod-#{start}-#{stop}.png", png
+        render.on 'image', (png, start, stop) =>
+            console.log "image #{start}..#{stop} to " + @generate_filename("#{start}-#{stop}.png")
+            fs.writeFile @generate_filename("#{start}-#{stop}.png"), png
         conv.on "sample", (value) =>
             render.write(value)
             true
