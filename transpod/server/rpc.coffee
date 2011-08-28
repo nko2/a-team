@@ -64,7 +64,7 @@ rpc_handler = (io) ->
                         console.log("check ok")
                     pushAll url, obj.toJSON()
         socket.on 'setValues', (data) ->
-            url = data.url
+            url = data.podurl
             values = data.values
             if not url
                 console.log("setValues failed, url missing")
@@ -90,7 +90,7 @@ rpc_handler = (io) ->
 
         socket.on 'addCue', (data) ->
             console.log(data)
-            url = data.url
+            url = data.podurl
             cue = data.cue
             podcast_collections.get_for_url url, (err, obj) =>
                 if not obj
