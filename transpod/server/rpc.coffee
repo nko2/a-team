@@ -38,7 +38,7 @@ class User
 rpc_handler = (io) ->
     io.of('/podcast').on 'connection', (socket) ->
         user = new User()
-        user.onPush (obj) ->
+        user.onPush = (obj) ->
             socket.emit 'push', obj
 
         socket.on 'list', (start, stop) ->
