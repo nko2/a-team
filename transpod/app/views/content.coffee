@@ -111,11 +111,11 @@ class ContentView extends Backbone.View
 
     zoomIn: (ev) ->
         ev.preventDefault()
-        @startZooming 0.01
+        @startZooming 0.04
 
     zoomOut: (ev) ->
         ev.preventDefault()
-        @startZooming -0.02
+        @startZooming -0.06
 
     zoomCenter: (ev) ->
         ev.preventDefault()
