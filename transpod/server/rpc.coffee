@@ -47,7 +47,7 @@ rpc_handler = (io) ->
                 console.log("obj", obj)
                 if err or not obj
                     console.log("new podcast", obj)
-                    npodcast = new ServerPodcast podurl:url, status:"queued", bla:"blubb"
+                    npodcast = new ServerPodcast(podurl:url, status:"queued")
                     console.log("n podcast", npodcast)
                     npodcast.save (err, obj) =>
                         console.log("saved", err, obj)

@@ -41,6 +41,10 @@ class Converter extends EventEmitter
 
 
 class ServerPodcast extends Podcast
+    constructor: (args...) ->
+        super
+        unless @get('podurl')
+            throw "Initialized ServerPodcast without podurl (arguments=#{args.join(', ')})"
 
     filename: (typ) =>
         rv = Path.join(Config.podcast_data, @id, typ)
@@ -209,7 +213,7 @@ class ServerPodcastCollection extends PodcastCollection
         console.log("request", _id)
         Config.db.get [_id], (err, doc) =>
             console.log("err", err, doc)
-            if err or not doc or doc[0].error
+            if err or not doc?[0]?.doc or doc[0].error
                  return callback err, null
             pod = new ServerPodcast doc[0].doc
             callback err, pod
