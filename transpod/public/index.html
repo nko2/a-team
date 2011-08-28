@@ -9,8 +9,10 @@
 window._ = require('underscore');
 window.$ = require('jquery');
 window.Backbone = require('backbone');
-socket = io.connect(null, {heartbeat: true, resource: "websocket"});
-require('./router');
+$(document).ready(function(){
+    socket = io.connect("/foo", {heartbeat: true, resource:"websocket"});
+    require('./router');
+});
 </script>
 </head>
 

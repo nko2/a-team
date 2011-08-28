@@ -12,7 +12,7 @@ podcastListeners = {}
 # push to all podcast listeners
 pushAll = (url, obj) ->
     if podcastListeners[url]
-        for socket in podcastListeners
+        for socket in podcastListeners[url]
             try
                 socket.emit 'push', obj
             catch e
@@ -22,7 +22,7 @@ pushAll = (url, obj) ->
         console.warn "no one to push for #{url}"
 
 rpc_handler = (io) ->
-    io.sockets.on 'connection', (socket) ->
+    io.of("/foo").on 'connection', (socket) ->
         console.log 'client connection', socket
 
         socket.on 'list', (start, stop) ->

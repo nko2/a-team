@@ -12,6 +12,15 @@ class ContentView extends Backbone.View
         @podcast = new Podcast( podurl: @url )
         @podcast.get('cues').bind 'add', (cue) =>
             @newCue cue
+        @podcast.bind 'update', =>
+            prefix = @podcast.get('prefix')
+            addAudio = (href) ->
+                src = document.createElement('source')
+                src.setAttribute('src', href)
+            addAudio "#{prefix}/audio.mp3"
+            addAudio "#{prefix}/audio.ogg"
+            @audio.appendChild(src)
+            @updateWaves()
         @podcast.fetch()
 
         @el = $('#content')
@@ -323,6 +332,9 @@ class ContentView extends Backbone.View
         delete @seeking
 
     updateWaves: ->
+        unless @podcast.get('prefix')
+            return
+
         # Clean-up
         @waveViews = @waveViews.filter (view) =>
             if view.end < @zoomStart or view.start > @zoomEnd
@@ -365,16 +377,16 @@ class ContentView extends Backbone.View
         if match[0]?
             match[0]
         else
-            view = new WaveView(start, end)
+            view = new WaveView(start, end, @podcast.get('prefix'))
             @el.append view.el
             @waveViews.push view
             view
 
 class WaveView extends Backbone.View
-    constructor: (@start, @end) ->
-        #@el = $('<img class="wave">')
-        #@el.attr 'src' # TODO
-        @el = $("<p class='wave'>#{start}-#{end}</p>")
+    constructor: (@start, @end, prefix) ->
+        @el = $('<img class="wave">')
+        @el.attr 'src', "/static/#{prefix}/#{@start}-#{@end}.png"
+        #@el = $("<p class='wave'>#{start}-#{end}</p>")
         @el.css 'z-index', "#{Math.ceil 1000/(end-start)}"
         super()
 

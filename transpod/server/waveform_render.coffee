@@ -23,7 +23,7 @@ class Image extends EventEmitter
             @sample = 0
 
     addColumn: (v) ->
-        y = Math.floor(H - H * Math.min(1, Math.max(0, 1.0 - v / -80)))
+        y = Math.floor(H - H * Math.min(1, Math.max(0, v / 60)))
 
         @drawColumn @x, y
         @x++
