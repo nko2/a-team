@@ -13,6 +13,9 @@ class Podcast extends Backbone.Model
         @set cues: new CueCollection()
         #socket.of('/podcast').on 'push', (o) =>
         #    console.log "got pushed", o
+    #
+    fetch: ->
+        socket.emit 'get', @get('url')
 
 class PodcastCollection extends Backbone.Collection
     model: Podcast
