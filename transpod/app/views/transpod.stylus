@@ -12,6 +12,7 @@ h1
     font-weight: bolder
     font-variant: small-caps
     min-height: 132px
+    text-shadow: 4px 4px 0 black
 
 h1:before
     content: url("transpod.png")
@@ -96,7 +97,7 @@ h2
     min-height: 30em
 
     border-radius: 6px
-    box-shadow: 0 2px 24px black
+    box-shadow: 0 4px 24px black
 
 #content > *
     position: absolute
