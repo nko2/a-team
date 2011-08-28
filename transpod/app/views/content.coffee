@@ -116,11 +116,10 @@ class ContentView extends Backbone.View
         # Fixed stuff:
         left = @el.scrollLeft()
         top = $(window).scrollTop() + @el.scrollTop()
-        @waveform.el.css('left', "#{left}px").
-            css('width', "#{@el.innerWidth()}px")
+        @waveform.el.css('top', "#{148 - top}px")
         @$('#buttons').css('top', "#{278 - top}px")
         @$('h3').each (i) ->
-            $(@).css('top', "#{118 - top + categoryToY(i)}px")
+            $(@).css('top', "#{122 - top + categoryToY(i)}px")
 
     emitZoomUpdate: ->
         if @onZoomUpdate

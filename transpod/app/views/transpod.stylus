@@ -124,9 +124,13 @@ h2
     background-color: #333
 
 #waveform
-    top: 4px
     height: 128px
     background-color: #226
+    position: fixed
+    width: 90%
+    left: 5%
+    right: 5%
+    margin: 0
 
 #dummy
     opacity: 0
