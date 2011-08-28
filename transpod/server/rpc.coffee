@@ -37,9 +37,10 @@ rpc_handler = (io) ->
                             console.log("check done", err, res)
                     #socket.emit 'send', npodcast.toJSON()
                 else
-                    socket.emit 'push', obj.toJSON()
+                    console.log("push")
+                    console.log("run check", obj)
                     obj.check (ok) =>
                         console.log("check ok")
-
+                    socket.emit 'push', obj.toJSON()
 module.exports = rpc_handler
 

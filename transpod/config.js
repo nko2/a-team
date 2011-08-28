@@ -1,3 +1,4 @@
+Path = require('path')
 module.exports = {
-    podcast_data: __dirname + "/../podcast_data/"
+    podcast_data: Path.join(__dirname, "/../podcast_data/")
 }
