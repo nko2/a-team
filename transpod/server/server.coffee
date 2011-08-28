@@ -61,7 +61,6 @@ design db, (err) ->
         requires = [
             'underscore'
             'backbone'
-            'socket.io-client'
             path.join(__dirname, '..', 'app/requires.coffee')
             jquery:'jquery-browserify'
         ]
