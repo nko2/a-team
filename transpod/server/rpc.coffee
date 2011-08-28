@@ -8,6 +8,15 @@ check = require('validator').check
 console.log(ServerPodcast, ServerPodcastCollection)
 podcast_collections = new ServerPodcastCollection()
 
+podcastListeners = {}
+# push to all podcast listeners
+pushAll = (url, obj) ->
+    if podcastListeners[url]
+        for socket in podcastListeners
+            socket.emit 'push', obj
+        console.log "pushed to #{podcastListeners.length} listeners for #{url}"
+    else
+        console.warn "no one to push for #{url}"
 
 rpc_handler = (io) ->
     io.sockets.on 'connection', (socket) ->
@@ -18,6 +27,14 @@ rpc_handler = (io) ->
 
         socket.on 'get', (url) ->
             console.log("get podcast url:", url)
+            unless podcastListeners[url]
+                podcastListeners[url] = []
+            podcastListeners[url].push socket
+            socket.on 'disconnect', ->
+                podcastListeners[url] = podcastListeners[url].filter (socket1) ->
+                    socket isnt socket1
+                if podcastListeners[url].length < 1
+                    delete podcastListeners[url]
 
             try
                 console.log("rulr",url)
@@ -43,8 +60,7 @@ rpc_handler = (io) ->
                     console.log("run check", obj)
                     obj.check (ok) =>
                         console.log("check ok")
-                    # TODO: push to all podcast listeners
-                    socket.emit 'push', obj.toJSON()
+                    pushAll url, obj.toJSON()
         socket.on 'setValues', (data) ->
             url = data.url
             values = data.values
@@ -66,8 +82,7 @@ rpc_handler = (io) ->
                         obj.set(vars)
                         obj.save()
                 obj.save (err, nobj)=>
-                    # TODO: push to all podcast listeners
-                    socket.emit 'push', nobj.toJSON()
+                    pushAll url nobj.toJSON()
 
 
 
@@ -94,8 +109,7 @@ rpc_handler = (io) ->
                 obj.save()
 
                 unless err
-                    # TODO: push to all podcast listeners
-                    socket.emit 'push', obj.toJSON()
+                    pushAll url, obj.toJSON()
                 obj.save()
 
 
