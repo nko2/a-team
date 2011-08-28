@@ -4,7 +4,6 @@ spawn = require('child_process').spawn
 
 W = 128
 H = 128
-MAX_VAL = 80.0
 
 class Image extends EventEmitter
     constructor: (@sampling) ->
@@ -24,7 +23,7 @@ class Image extends EventEmitter
             @sample = 0
 
     addColumn: (v) ->
-        y = H - Math.ceil(H * (Math.max(0, Math.min(MAX_VAL, v / MAX_VAL))))
+        y = Math.floor(H - H * Math.min(1, Math.max(0, 1.0 - v / -80)))
 
         @drawColumn @x, y
         @x++
