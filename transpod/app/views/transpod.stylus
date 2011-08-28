@@ -51,6 +51,9 @@ h1:before
     padding: 1em 0
     border: 5px solid #972
 
+#top10 a
+    cursor: pointer
+
 #fresh > *, #top10 > *
     margin: 0.5em 2em
     padding: 0
@@ -92,7 +95,7 @@ h2
 #content
     cursor: crosshair
     position: absolute
-    margin: 0 auto
+    margin: 0 auto 2em
     padding: 0
     left: 5%
     width: 90%
@@ -243,3 +246,17 @@ h2
     padding: 0
     border: 1px dotted #333
 
+#footer
+    position: fixed
+    top: 0
+    right: 0
+    text-align: right
+    color: #ccc
+    z-index: 10
+    font-size: 70%
+    margin: 0
+    padding: 0
+#footer b
+    color: white
+#footer a
+    color: #ffc
