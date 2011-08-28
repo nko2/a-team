@@ -1,12 +1,14 @@
 Config = require('../../config')
 { Podcast, PodcastCollection }  = require('../../app/models/podcast')
 { Cue, CueCollection, TYPES } = require('../../app/models/cue')
+{ EventEmitter } = require('events')
 Path = require('path')
 fs = require('fs')
 Url = require('url')
 query = require('querystring')
 _ = require('underscore')
 { Downloader } = require('../downloader')
+spawn = require('child_process').spawn
 
 console.log("podcast", Podcast, PodcastCollection)
 
@@ -21,6 +23,25 @@ safe_url = (url) ->
 class ServerCue extends Cue
 
 
+class Converter extends EventEmitter
+    constructor: (@sourcefile) ->
+
+    run: (callback) =>
+        child = spawn("./transcoder/transcode.py", [@sourcefile])
+
+        child.stdout.on 'data', (data) =>
+            data = data.toString('ascii')
+            lines = data.split("\n")
+            for line in lines
+                @emit("sample", Number(line))
+        child.stderr.on 'data', (data) ->
+            console.log data
+
+        child.on 'exit', (code) =>
+            callback(code, this)
+        
+
+
 class ServerPodcast extends Podcast
     filename: (typ) =>
         rv = Path.join(Config.podcast_data, @id, typ)
@@ -29,8 +50,16 @@ class ServerPodcast extends Podcast
         checked = (exists) =>
             if not exists or @get("download") != "done"
                 console.log("path missing, downloading")
-                @download (err) ->
-                    callback(err, true)
+                @download (err) =>
+                    if not err
+                        conv = new Converter(@get("sourcefile"))
+                        conv.on "sample", (value) =>
+                            # FIXME ASTRO
+                            true
+
+                        conv.run (err, n) =>
+                            # after convert
+                            callback(err, true)
             else
                 return callback(null, true)
         if not @get("source_file")
@@ -62,6 +91,8 @@ class ServerPodcast extends Podcast
         nd.on 'success', =>
             @set "download": "done"
             @save()
+            # start transititon
+
             callback(null, this)
         nd.on 'failed', (err) =>
             console.log("Got error: " + err.message)
@@ -168,5 +199,5 @@ class ServerPodcastCollection extends PodcastCollection
             pod = new ServerPodcast doc[0].doc
             callback err, pod
 
-module.exports = { ServerPodcast, ServerPodcastCollection, TYPES }
+module.exports = { ServerPodcast, ServerPodcastCollection, TYPES, Converter }
 
