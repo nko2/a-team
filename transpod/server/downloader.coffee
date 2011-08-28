@@ -36,7 +36,7 @@ class Downloader extends Stream
         @outfile = path.join(@outputDir, safe_name(url))
         if LOCKS[@outfile]
             @emit("failed", 1000)
-            return callback("already in progress", null)
+            return
         else
             LOCKS[@outfile] = this
         dl = spawn('wget', ['-q', '-O', '-', url])
@@ -71,7 +71,7 @@ class Downloader extends Stream
 
                 # call the event
                 @emit('progress', @lastProgress) #, speed)
-        dl.stdin.end()
+        #dl.stdin.end()
         dl.on 'exit', (code) =>
             console.log("got exit:" + code)
             delete LOCKS[@outfile]
@@ -80,6 +80,5 @@ class Downloader extends Stream
                 @emit("success")
             else
                 @emit("failed", "error in wget: " + code)
-                fs.unlink @outfile
 
 exports.Downloader = Downloader

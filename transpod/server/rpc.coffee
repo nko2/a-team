@@ -13,7 +13,10 @@ podcastListeners = {}
 pushAll = (url, obj) ->
     if podcastListeners[url]
         for socket in podcastListeners
-            socket.emit 'push', obj
+            try
+                socket.emit 'push', obj
+            catch e
+                console.error "Error pushing: #{e.stack or e}"
         console.log "pushed to #{podcastListeners[url].length} listeners for #{url}"
     else
         console.warn "no one to push for #{url}"

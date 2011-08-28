@@ -23,6 +23,7 @@ class ServerCue extends Cue
 
 class Converter extends Stream
     constructor: (@outpath) ->
+        console.log "./transcoder/transcode.py", ['/dev/stdin', @outpath]
         @child = spawn("./transcoder/transcode.py", ['/dev/stdin', @outpath])
         @writable = true # for pipe()
         console.log "Spawned converter for #{@outpath}"
@@ -38,8 +39,7 @@ class Converter extends Stream
             console.log data.toString()
 
         @child.on 'exit', (code) =>
-            if code
-                @emit 'error', "Converter exit #{code}"
+            @emit 'error', "Converter exit #{code}"
             @emit 'end'
 
     write: (data) ->
@@ -64,7 +64,7 @@ class ServerPodcast extends Podcast
 
     check: (callback) =>
         console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-        console.log(@generate_filename("mp3"))
+        console.log(@generate_filename("audio.mp3"))
         checked = (exists) =>
             if not exists or @get("download") != "done"
                 console.log("path missing, downloading")
@@ -89,10 +89,10 @@ class ServerPodcast extends Podcast
 
         try
             console.log "mkdir #{@generate_filename()}"
-            fs.mkdirSync @generate_filename(), 0644
+            fs.mkdirSync @generate_filename(), 0755
         catch e
             console.error e.stack or e
-        conv = new Converter(@generate_filename("", ""))
+        conv = new Converter(@generate_filename("audio"))
         render = new Waveform.SeriesRenderer()
         render.on 'image', (png, start, stop) =>
             console.log "image #{start}..#{stop} to " + @generate_filename("#{start}-#{stop}.png")
