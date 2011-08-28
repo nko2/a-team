@@ -319,8 +319,9 @@ class ContentView extends Backbone.View
     updateWaves: ->
         console.log "updateWaves"
         # Clean-up
-        @waveViews = @waveViews.filter (view) ->
+        @waveViews = @waveViews.filter (view) =>
             if view.end < @zoomStart or view.start > @zoomEnd
+                console.log "rm wave #{view.start}..#{view.end}"
                 view.el.detach()
                 false
             else
