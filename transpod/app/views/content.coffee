@@ -67,6 +67,7 @@ class ContentView extends Backbone.View
     remotePushed: (obj) ->
         if obj.type is 'podcast'
             @podcast.set obj
+            @podcast.trigger 'update'
         if CATEGORIES.indexOf(obj.type) >= 0
             found = false
             @newCue new Cue(obj)
