@@ -126,6 +126,7 @@ class ContentView extends Backbone.View
         Math.ceil(winWidth * @length / zoomSpan)
 
     zoomTo: (@zoomStart, @zoomEnd) ->
+        console.log "zoomTo", @zoomStart, @zoomEnd
         # Normalize first
         if isNaN(@zoomStart)
             @zoomStart = 0
