@@ -7,6 +7,7 @@ console.log(ServerPodcast, ServerPodcastCollection)
 
 # ♥
 podcastListeners = {}
+podcast_collections = new ServerPodcastCollection
 
 class User
     constructor: ->
@@ -48,9 +49,6 @@ rpc_handler = (io) ->
             console.log("get podcast url:", url)
             user.get url
 
-        socket.on 'addCue', (obj) ->
-            user.addCue obj
-
             try
                 url = url.url
                 console.log("rulr",url)
@@ -61,7 +59,7 @@ rpc_handler = (io) ->
             podcast_collections.get_for_url url, (err, obj) =>
                 console.log("got podcast, hurray", err, "end")
                 console.log("obj", obj)
-                if err and err.error == 'not_found'
+                if err or not obj
                     console.log("new podcast", obj)
                     npodcast = new ServerPodcast podurl:url, status:"queued", bla:"blubb"
                     console.log("n podcast", npodcast)
