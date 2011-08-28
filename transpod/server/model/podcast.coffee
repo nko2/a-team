@@ -26,25 +26,30 @@ class ServerPodcast extends Podcast
         rv = Path.join(Config.podcast_data, @id, typ)
         return rv
     check: (callback) =>
-        Path.exists Path.join(Config.podcast_data, @id, "done"), (exists) =>
+        checked = (exists) =>
             if not exists or @get("download") != "done"
                 console.log("path missing, downloading")
                 @download (err) ->
                     callback(err, true)
             else
                 return callback(null, true)
-
+        if not @get("source_file")
+            checked(false)
+        else
+            Path.exists @get("source_file"), checked
 
     download: (callback) =>
         console.log("download file")
         @set(status:"download")
-        @save
 
         nd = new Downloader
         console.log(Config.podcast_data)
         nd.setOutput(Config.podcast_data)
         nd.download(@get("podurl")) #Url.parse(@get("podurl")).href)
-
+        vars = {}
+        vars.source_file = nd.outfile
+        @set(vars)
+        @save
 
         #options = Url.parse(@get("podurl"))
         #console.log(options)

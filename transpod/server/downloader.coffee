@@ -7,6 +7,10 @@ fs = require('fs')
 trim = (nam) ->
     return nam.replace(/^\s+|\s+$/g, '')
 
+safe_name = (url) ->
+    return querystring.escape(url).replace(/\%/g,"_")
+
+
 regExp = new RegExp('\\d{0,}%','i')
 # dirty little lock
 LOCKS = {}
@@ -28,10 +32,9 @@ class Downloader extends EventEmitter
 
     download: (url, callback) =>
         console.log(@outputDir)
-        @outfile = path.join(@outputDir, querystring.escape(url))
-        console.log("LOCKS", LOCKS)
+        @outfile = path.join(@outputDir, safe_name(url))
         if LOCKS[@outfile]
-            @emit("error", 1000)
+            @emit("failed", 1000)
             return callback("already in progress", null)
         else
             LOCKS[@outfile] = this
@@ -39,7 +42,7 @@ class Downloader extends EventEmitter
         #dl.on 'exit', (code) =>
         #    console.log('child process exited with code ' + code)
         #    callback(code)
-        console.log('wget', ['-c', '-P ' + @outputDir, '-O ' + url, url])
+        console.log('wget', ['-c', '-P',@outputDir, '-O', @outfile, url])
 
         dl.stdout.on 'data', (data) =>
             console.log("stdout", data)
