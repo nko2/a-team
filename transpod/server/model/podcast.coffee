@@ -21,10 +21,10 @@ class ServerCue extends Cue
 
 
 class Converter extends EventEmitter
-    constructor: (@sourcefile) ->
+    constructor: (@sourcefile, @outpath) ->
 
     run: (callback) =>
-        child = spawn("./transcoder/transcode.py", [@sourcefile])
+        child = spawn("./transcoder/transcode.py", [@sourcefile, @outpath])
 
         child.stdout.on 'data', (data) =>
             data = data.toString('ascii')
@@ -43,8 +43,15 @@ class ServerPodcast extends Podcast
     filename: (typ) =>
         rv = Path.join(Config.podcast_data, @id, typ)
         return rv
+
+    generate_filename: (suffix) =>
+        return Path.join(Config.static_dir, @_id, "audio" + suffix or "")
+
     check: (callback) =>
+        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+        console.log(@generate_filename("mp3"))
         checked = (exists) =>
+            
             if not exists or @get("download") != "done"
                 console.log("path missing, downloading")
                 @download (err) =>
@@ -54,7 +61,6 @@ class ServerPodcast extends Podcast
                         render.on 'image', (png, start, stop) ->
                             fs.writeFileSync "/tmp/transpod-#{start}-#{stop}.png", png
                         conv.on "sample", (value) =>
-                            console.log 'render write', value
                             render.write(value)
                             true
 
@@ -107,9 +113,9 @@ class ServerPodcast extends Podcast
 
 
     _id: () =>
-        console.log "_id", safe_url(@get("podurl"))
+        #console.log "_id", safe_url(@get("podurl"))
         rv =  "podcast_" + safe_url(@get("podurl"))
-        console.log(rv)
+        #console.log(rv)
         return rv
 
     # returns data for update
@@ -130,7 +136,7 @@ class ServerPodcast extends Podcast
                         true #doc[key] = value
 
                 doc._rev = res._rev
-                console.log("rev", doc._rev, res._rev)
+                #console.log("rev", doc._rev, res._rev)
 
             for c in TYPES
                 nv = {}
@@ -143,9 +149,9 @@ class ServerPodcast extends Podcast
 
                 doc[c] = nv
                 @set c:nv
-            console.log("done", doc)
+            #console.log("done", doc)
             Config.db.save @_id(), doc._rev, doc, (err, res) =>
-                console.log("config merge save", err, res)
+                #console.log("config merge save", err, res)
                 if res and res[0] and res[0].rev
                     true
                     @set _rev:res[0].rev
@@ -154,18 +160,18 @@ class ServerPodcast extends Podcast
 
 
     save: (callback) =>
-        console.log("save model")
+        #console.log("save model")
         if not @get("podurl")
             throw new Error("podurl is required")
         changed = @changedAttributes()
-        console.log("changed", changed)
+        #console.log("changed", changed)
         data = @filteredJSON()
         data["_id"] = @_id()
         data["type"] = "podcast"
         is_new = not data["_rev"]
         data["id"] = data["name"] = @get("podurl")
-        console.log("data", data, @_id())
-        console.log "ServerPodcast", @
+        #console.log("data", data, @_id())
+        #console.log "ServerPodcast", @
         if is_new
             Config.db.save [data], data, (err, res) =>
                 console.log("saved error:", err, res)
@@ -173,10 +179,10 @@ class ServerPodcast extends Podcast
                 #    @set "_rev":(res.rev or "xxx")
                 callback(err, res) if callback
         else
-            console.log("merge")
+            #console.log("merge")
             #delete data["_id"]
             #delete data["id"]
-            console.log(data)
+            #console.log(data)
             # data["_rev"]
             ndata = { _id: data._id }
             ndata["progress"] = data.progress
