@@ -86,6 +86,7 @@ h2
     text-align: center
 
 #content
+    cursor: crosshair
     position: absolute
     margin: 0 auto
     padding: 0
@@ -107,7 +108,13 @@ h2
     content: overflow
     min-width: 10em
     position: fixed
-    cursor: crosshair
+
+#playtime
+    color: white
+    font-weight: bolder
+    opacity: 0.7
+    font-size: 70%
+    margin-right: 4em
 
 .button
     cursor: pointer

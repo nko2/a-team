@@ -26,8 +26,23 @@ class CueView extends Backbone.View
         @$('.text').focus()
 
     textEdited: (ev) ->
-        console.log 'textEdited', @$('.text').text()
-        @model.save()
+        console.log 'textEdited', ev
+        wasReturn = false
+        if ev and
+           (ev.keyCode is 10 or ev.keyCode is 13)
+            wasReturn = true
+        text = @$('.text').text()
+        if text.indexOf("\n") >= 0
+            text = text.slice(0, text.indexOf("\n"))
+            @$('.text').text(text)
+            wasReturn = true
+
+        if wasReturn
+            ev.preventDefault()
+            @el.blur()
+            text = @$('.text').text()
+            @model.set text: text
+            @model.save()
 
     # Move whole cue
     moveTo: (left, width, top) ->

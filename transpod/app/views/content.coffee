@@ -29,7 +29,16 @@ class ContentView extends Backbone.View
         @audio.appendChild(src)
         @audio.addEventListener 'load', =>
             @length = @audio.duration
+        @audio.addEventListener 'playing', =>
+            @$('#play').text "▮▮"
+            @startPlayTimer()
+        @audio.addEventListener 'play', =>
+            @$('#play').text "▮▮"
+            @startPlayTimer()
+        @audio.addEventListener 'pause', =>
+            @$('#play').text "▶"
         @audio.load()
+        @startPlayTimer()
 
         @waveform = new WaveformView()
         @waveselection = @$('#waveselection')
@@ -58,6 +67,7 @@ class ContentView extends Backbone.View
         view
 
     events:
+        'click #play': 'clickPlay'
         'mousedown #zoomin': 'zoomIn'
         'mousedown #zoomout': 'zoomOut'
         'mouseup #zoomin': 'stopZooming'
@@ -204,6 +214,22 @@ class ContentView extends Backbone.View
         if type
             view = @newCue new Cue(type: type, start: t, end: t + 10, podcast: @url)
             view.editText()
+
+    clickPlay: (ev) ->
+        ev.preventDefault()
+
+        if @audio.paused
+            @audio.play()
+        else
+            @audio.pause()
+
+    startPlayTimer: ->
+        @$('#playtime').text Timefmt.toString(@audio.currentTime)
+        unless @audio.paused or @playTimer
+            @playTimer = setTimeout =>
+                delete @playTimer
+                @startPlayTimer()
+            , 40
 
 module.exports = ContentView
 
