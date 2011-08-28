@@ -3,6 +3,7 @@ CueView = require('./cue')
 { Podcast } = require('../models/podcast')
 { Cue } = require('../models/cue')
 Backbone = require('backbone')
+Timefmt = require('../timefmt')
 
 Backbone.sync = require('../models/sync')
 
@@ -31,6 +32,13 @@ class ContentView extends Backbone.View
         @audio.load()
 
         @waveform = new WaveformView()
+        @waveselection = @$('#waveselection')
+        @waveselection.hide()
+        @timehints =
+            start: @$('#starthint')
+            end: @$('#endhint')
+        @timehints.start.hide()
+        @timehints.end.hide()
 
         @cueViews = [
             # STUBS:
@@ -116,7 +124,7 @@ class ContentView extends Backbone.View
         # Fixed stuff:
         left = @el.scrollLeft()
         top = $(window).scrollTop() + @el.scrollTop()
-        @waveform.el.css('top', "#{148 - top}px")
+        @$('#waveform').css('top', "#{148 - top}px")
         @$('#buttons').css('top', "#{278 - top}px")
         @$('h3').each (i) ->
             $(@).css('top', "#{122 - top + categoryToY(i)}px")
@@ -128,6 +136,8 @@ class ContentView extends Backbone.View
     beginDrag: (cue, pos) ->
         unless @dragging
             @dragging = { cue, pos }
+            @updateWaveSelection()
+            @waveselection.show()
 
     drag: (ev) ->
         ev.preventDefault()
@@ -142,6 +152,9 @@ class ContentView extends Backbone.View
             if @dragging.pos is 'end' and t > @dragging.cue.model.get('start')
                 @dragging.cue.model.set end: t
             @moveCue @dragging.cue
+            @updateWaveSelection()
+            @timehints.start.fadeIn(200)
+            @timehints.end.fadeIn(200)
 
     dragStop: (ev) ->
         ev.preventDefault()
@@ -151,6 +164,25 @@ class ContentView extends Backbone.View
             delete @dragging
             # Then attempt syncing
             cue.save()
+            @waveselection.fadeOut(1000)
+            @timehints.start.fadeOut(500)
+            @timehints.end.fadeOut(500)
+
+    updateWaveSelection: ->
+        start = @dragging.cue.model.get('start')
+        end = @dragging.cue.model.get('end')
+        fullWidth = @getFullWidth()
+        left = start * fullWidth / @length
+        width = (end - start) * fullWidth / @length
+        @waveselection.css('left', "#{left}px").
+            css('width', "#{width}px")
+        @timehints.start.text(Timefmt.toString(start))
+        @timehints.end.text(Timefmt.toString(end))
+        top = categoryToY(@dragging.cue.model.get('type')) + 8
+        @timehints.start.css('top', "#{top}px")
+        @timehints.end.css('top', "#{top}px")
+        @timehints.start.css('left', "#{left - 1 - @timehints.start.innerWidth()}px")
+        @timehints.end.css('left', "#{left + width + 3}px")
 
     pointCreate: (ev) ->
         ev.preventDefault()

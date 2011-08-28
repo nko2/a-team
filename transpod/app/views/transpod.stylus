@@ -124,16 +124,26 @@ h2
     background-color: #333
 
 #waveform
-    height: 128px
     background-color: #226
+    top: 148px
+    height: 128px
     position: fixed
     width: 90%
     left: 5%
     right: 5%
+    padding: 0
     margin: 0
 
+#waveselection
+    top: 8px
+    height: 128px
+    opacity: 0.5
+    background-color: #77e
+    border-left: 1px solid #fff
+    border-right: 1px solid #fff
+    z-index: 9
+
 #dummy
-    opacity: 0
     width: 1px
 
 #content h3
@@ -184,3 +194,9 @@ h2
 .grabend
     right: 0
     cursor: e-resize
+
+.timehint
+    color: white
+    font-weight: bolder
+    opacity: 0.7
+    font-size: 70%
