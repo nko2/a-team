@@ -77,13 +77,16 @@ class ContentView extends Backbone.View
         'mouseup #zoomin': 'stopZooming'
         'mouseup #zoomout': 'stopZooming'
         'mousemove': 'drag'
-        'mouseup': 'dragStop'
-        'mouseup': 'stopZooming'
-        'mouseup': 'seekStop'
+        'mouseup': 'mouseup'
         'mousedown': 'pointCreate'
         'mousedown #waveform': 'seekStart'
         'mousemove #waveform': 'seekMove'
         'mouseup #waveform': 'seekStop'
+
+    mouseup: (ev) ->
+        @dragStop ev
+        @stopZooming ev
+        @seekStop ev
 
     startZooming: (factor) ->
         zoomSpan = @zoomEnd - @zoomStart
