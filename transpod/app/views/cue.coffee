@@ -39,7 +39,7 @@ class CueView extends Backbone.View
 
         if wasReturn
             ev.preventDefault()
-            @el.blur()
+            @$('.text').blur()
             text = @$('.text').text()
             @model.set text: text
             @model.save()

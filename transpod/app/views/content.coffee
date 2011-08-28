@@ -78,7 +78,12 @@ class ContentView extends Backbone.View
         'mouseup #zoomout': 'stopZooming'
         'mousemove': 'drag'
         'mouseup': 'dragStop'
+        'mouseup': 'stopZooming'
+        'mouseup': 'seekStop'
         'mousedown': 'pointCreate'
+        'mousedown #waveform': 'seekStart'
+        'mousemove #waveform': 'seekMove'
+        'mouseup #waveform': 'seekStop'
 
     startZooming: (factor) ->
         zoomSpan = @zoomEnd - @zoomStart
@@ -245,6 +250,20 @@ class ContentView extends Backbone.View
                 delete @playTimer
                 @startPlayTimer()
             , 40
+
+    seekStart: (ev) ->
+        @seeking = true
+        @seekMove ev
+
+    seekMove: (ev) ->
+        unless @seeking
+            return
+
+        @audio.currentTime = @length * ((ev.offsetX or ev.layerX) + @el.scrollLeft()) / @getFullWidth()
+        @startPlayTimer()
+
+    seekStop: (ev) ->
+        delete @seeking
 
 module.exports = ContentView
 
