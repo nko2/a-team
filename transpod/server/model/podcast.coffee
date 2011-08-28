@@ -27,10 +27,12 @@ class Converter extends EventEmitter
         child = spawn("./transcoder/transcode.py", [@sourcefile])
 
         child.stdout.on 'data', (data) =>
+            child.stdout.pause()
             data = data.toString('ascii')
             lines = data.split("\n")
             for line in lines
                 @emit("sample", Number(line))
+            child.stdout.resume()
         child.stderr.on 'data', (data) ->
             console.log data
 
@@ -54,7 +56,6 @@ class ServerPodcast extends Podcast
                         render.on 'image', (png, start, stop) ->
                             fs.writeFileSync "/tmp/transpod-#{start}-#{stop}.png", png
                         conv.on "sample", (value) =>
-                            console.log 'render write', value
                             render.write(value)
                             true
 
