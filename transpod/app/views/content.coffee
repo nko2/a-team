@@ -9,7 +9,7 @@ Backbone.sync = require('../models/sync')
 
 class ContentView extends Backbone.View
     initialize: (@url) ->
-        @podcast = new Podcast( url: @url )
+        @podcast = new Podcast( podurl: @url )
         @podcast.get('cues').bind 'add', (cue) =>
             @newCue cue
         @podcast.fetch()
@@ -283,7 +283,7 @@ class ContentView extends Backbone.View
                    end > view1.model.get('start')
                     end = view1.model.get('start')
             # Go
-            view = @newCue new Cue(type: type, start: start, end: end, podcast: @url)
+            view = @newCue new Cue(type: type, start: start, end: end, podurl: @url)
             view.clickEdit()
 
     clickPlay: (ev) ->

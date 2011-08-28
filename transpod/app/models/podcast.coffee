@@ -15,7 +15,7 @@ class Podcast extends Backbone.Model
         #    console.log "got pushed", o
     #
     fetch: ->
-        socket.emit 'get', @get('url')
+        socket.emit 'get', @get('podurl')
 
 class PodcastCollection extends Backbone.Collection
     model: Podcast
