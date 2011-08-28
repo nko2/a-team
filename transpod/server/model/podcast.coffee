@@ -47,7 +47,8 @@ class ServerPodcast extends Podcast
         return rv
 
     generate_filename: (suffix) =>
-        return Path.join(Config.static_dir, @_id, "audio" + suffix or "")
+        suffix = suffix or ""
+        return Path.join(Config.static_dir, @_id(), "audio" + suffix)
 
     check: (callback) =>
         console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
