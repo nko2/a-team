@@ -317,11 +317,9 @@ class ContentView extends Backbone.View
         delete @seeking
 
     updateWaves: ->
-        console.log "updateWaves"
         # Clean-up
         @waveViews = @waveViews.filter (view) =>
             if view.end < @zoomStart or view.start > @zoomEnd
-                console.log "rm wave #{view.start}..#{view.end}"
                 view.el.detach()
                 false
             else
@@ -361,7 +359,6 @@ class ContentView extends Backbone.View
         if match[0]?
             match[0]
         else
-            console.log "new wave #{start}..#{end}"
             view = new WaveView(start, end)
             @el.append view.el
             @waveViews.push view
