@@ -31,12 +31,6 @@ class Downloader extends Stream
     getOutput: =>
         return @outputDir
 
-    write: (data) ->
-        @emit 'data', data
-
-    end: ->
-        @emit 'end'
-
     download: (url) =>
         console.log(@outputDir)
         @outfile = path.join(@outputDir, safe_name(url))
@@ -49,7 +43,12 @@ class Downloader extends Stream
         #dl.on 'exit', (code) =>
         #    console.log('child process exited with code ' + code)
         #    callback(code)
-        dl.stdout.pipe @
+        dl.stdout.on 'data', (data) =>
+            dl.stdout.pause()
+            @emit 'data', data
+            dl.stdout.resume()
+        dl.stdout.on 'end', =>
+            @emit 'end'
 
         dl.stderr.on 'data', (data) =>
             data = data.toString('ascii')

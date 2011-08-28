@@ -24,6 +24,8 @@ class ServerCue extends Cue
 class Converter extends Stream
     constructor: (@outpath) ->
         @child = spawn("./transcoder/transcode.py", ['/dev/stdin', @outpath])
+        @writable = true # for pipe()
+        console.log "Spawned converter for #{@outpath}"
 
         stream = new BufferStream(encoding: 'ascii', size: 'flexible')
         stream.split "\n", (line) =>
@@ -33,7 +35,7 @@ class Converter extends Stream
         @child.stdout.pipe stream
 
         @child.stderr.on 'data', (data) ->
-            console.log data
+            console.log data.toString()
 
         @child.on 'exit', (code) =>
             if code
@@ -90,7 +92,7 @@ class ServerPodcast extends Podcast
         vars.source_file = nd.outfile
         @set(vars)
 
-        conv = new Converter()
+        conv = new Converter(@generate_filename("", ""))
         render = new Waveform.SeriesRenderer()
         render.on 'image', (png, start, stop) ->
             fs.writeFileSync "/tmp/transpod-#{start}-#{stop}.png", png

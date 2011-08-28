@@ -14,7 +14,7 @@ pushAll = (url, obj) ->
     if podcastListeners[url]
         for socket in podcastListeners
             socket.emit 'push', obj
-        console.log "pushed to #{podcastListeners.length} listeners for #{url}"
+        console.log "pushed to #{podcastListeners[url].length} listeners for #{url}"
     else
         console.warn "no one to push for #{url}"
 
@@ -54,6 +54,8 @@ rpc_handler = (io) ->
                         # FIXME jobserver
                         npodcast.check (err, res) ->
                             console.log("check done", err, res)
+                        npodcast.bind 'change', ->
+                            pushAll url
                     #socket.emit 'send', npodcast.toJSON()
                 else
                     console.log("push")
