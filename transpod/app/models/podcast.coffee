@@ -4,11 +4,6 @@ Backbone = require("backbone")
 WHITELIST = ["author", "guests", "homepage", "episode", "series", "location", "date"]
 
 class Podcast extends Backbone.Model
-    defaults:
-        url: null
-        author: "unknown"
-        guests: []
-
     initialize: ->
         @set cues: new CueCollection()
         #socket.of('/podcast').on 'push', (o) =>

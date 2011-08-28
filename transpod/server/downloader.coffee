@@ -1,3 +1,4 @@
+{ Stream } = require('stream')
 { EventEmitter } = require('events')
 spawn = require('child_process').spawn
 querystring = require('querystring')
@@ -15,7 +16,7 @@ regExp = new RegExp('\\d{0,}%','i')
 # dirty little lock
 LOCKS = {}
 
-class Downloader extends EventEmitter
+class Downloader extends Stream
 
     constructor (@outputDir='../files') ->
         @dl = null
@@ -30,7 +31,7 @@ class Downloader extends EventEmitter
     getOutput: =>
         return @outputDir
 
-    download: (url, callback) =>
+    download: (url) =>
         console.log(@outputDir)
         @outfile = path.join(@outputDir, safe_name(url))
         if LOCKS[@outfile]
@@ -38,14 +39,16 @@ class Downloader extends EventEmitter
             return callback("already in progress", null)
         else
             LOCKS[@outfile] = this
-        dl = spawn('wget', ['-c', '-P ' + @outputDir, '-O', @outfile, url])
+        dl = spawn('wget', ['-q', '-O', '-', url])
         #dl.on 'exit', (code) =>
         #    console.log('child process exited with code ' + code)
         #    callback(code)
-        console.log('wget', ['-c', '-P',@outputDir, '-O', @outfile, url])
-
         dl.stdout.on 'data', (data) =>
-            console.log("stdout", data)
+            dl.stdout.pause()
+            @emit 'data', data
+            dl.stdout.resume()
+        dl.stdout.on 'end', =>
+            @emit 'end'
 
         dl.stderr.on 'data', (data) =>
             data = data.toString('ascii')
@@ -61,7 +64,7 @@ class Downloader extends EventEmitter
                 if @lastProgress != progress[0]
                     #console.log('progress: ' + progress[0])
                     @lastProgress = lastProgress = progress[0]
-                    
+
                 # extract the download speed
                 #speed = data.substr(@position + progress[0].length).trim()
                 #@speed = speed.substr(0, speed.indexOf('/s') + 2).trim()
@@ -78,10 +81,5 @@ class Downloader extends EventEmitter
             else
                 @emit("failed", "error in wget: " + code)
                 fs.unlink @outfile
-
-            
-    stopDownload = () =>
-        console.log('download stopped')
-        dl.kill()
 
 exports.Downloader = Downloader

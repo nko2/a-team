@@ -1,3 +1,4 @@
+{ Stream } = require('stream')
 Config = require('../../config')
 { Podcast, PodcastCollection }  = require('../../app/models/podcast')
 { Cue, CueCollection, TYPES } = require('../../app/models/cue')
@@ -20,27 +21,40 @@ safe_url = (url) ->
 class ServerCue extends Cue
 
 
-class Converter extends EventEmitter
-    constructor: (@sourcefile, @outpath) ->
-
-    run: (callback) =>
-        child = spawn("./transcoder/transcode.py", [@sourcefile, @outpath])
+class Converter extends Stream
+    constructor: (@outpath) ->
+        @child = spawn("./transcoder/transcode.py", ['/dev/stdin', @outpath])
+        @writable = true # for pipe()
+        console.log "Spawned converter for #{@outpath}"
 
         stream = new BufferStream(encoding: 'ascii', size: 'flexible')
         stream.split "\n", (line) =>
-            child.stdout.pause()
+            @child.stdout.pause()
             @emit("sample", Number(line))
-            child.stdout.resume()
-        child.stdout.pipe stream
-        child.stderr.on 'data', (data) ->
-            console.log data
+            @child.stdout.resume()
+        @child.stdout.pipe stream
 
-        child.on 'exit', (code) =>
-            callback(code, this)
+        @child.stderr.on 'data', (data) ->
+            console.log data.toString()
+
+        @child.on 'exit', (code) =>
+            if code
+                @emit 'error', "Converter exit #{code}"
+            @emit 'end'
+
+    write: (data) ->
+        @child.stdin.write data
+
+    end: (data) ->
+        @child.stdin.end(data)
 
 
 
 class ServerPodcast extends Podcast
+    constructor: (args...) ->
+        super
+        unless @get('podurl')
+            throw "Initialized ServerPodcast without podurl (arguments=#{args.join(', ')})"
 
     filename: (typ) =>
         rv = Path.join(Config.podcast_data, @id, typ)
@@ -65,19 +79,41 @@ class ServerPodcast extends Podcast
                         create_job()
                     else
                         callback(null, this)
+        ###
+        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+        console.log(@generate_filename("mp3"))
+        checked = (exists) =>
+            if not exists or @get("download") != "done"
+                console.log("path missing, downloading")
+                @download callback
+            else
+                console.log "already downloaded"
+                return callback(null, true)
+        if not @get("source_file")
+            checked(false)
+        else
+            Path.exists @get("source_file"), checked
+        ###
 
     download: (callback) =>
-        console.log("download file")
+        console.log("download file #{@get('podurl')}")
         @set(status:"download")
 
         nd = new Downloader
         console.log(Config.podcast_data)
-        nd.setOutput(Config.podcast_data)
         nd.download(@get("podurl")) #Url.parse(@get("podurl")).href)
         vars = {}
         vars.source_file = nd.outfile
         @set(vars)
-        @save
+
+        conv = new Converter(@generate_filename("", ""))
+        render = new Waveform.SeriesRenderer()
+        render.on 'image', (png, start, stop) ->
+            fs.writeFileSync "/tmp/transpod-#{start}-#{stop}.png", png
+        conv.on "sample", (value) =>
+            render.write(value)
+            true
+        nd.pipe conv
 
         #options = Url.parse(@get("podurl"))
         #console.log(options)
@@ -196,7 +232,7 @@ class ServerPodcastCollection extends PodcastCollection
         console.log("request", _id)
         Config.db.get [_id], (err, doc) =>
             console.log("err", err, doc)
-            if err or not doc or doc[0].error
+            if err or not doc?[0]?.doc or doc[0].error
                  return callback err, null
             pod = new ServerPodcast doc[0].doc
             callback err, pod

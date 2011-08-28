@@ -25,11 +25,11 @@ jobs.process 'download', 3, (job, done) ->
         podcast.download (err) =>
             console.log("download done", err)
             if not err
-                jobs.create("convert", url:job.data.url).save()
                 done()
             else
                 done(err)
 
+###
 jobs.process 'convert', 1, (job, done) ->
     console.log("job convert", job.data)
     collection.get_for_url job.data.url, (err, podcast) ->
@@ -56,4 +56,4 @@ jobs.process 'convert', 1, (job, done) ->
         podcast.save()
 
 
-
+###
