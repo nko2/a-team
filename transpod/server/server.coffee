@@ -52,6 +52,7 @@ design db, (err) ->
 
 
         app.use(connect.static(__dirname + '/../public/'))
+        app.use("/static", connect.static(__dirname + '/../static/'))
         app.use(express.errorHandler({dumpExceptions: true, showStack: true}))
 
         app.enable('log')
