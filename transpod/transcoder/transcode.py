@@ -4,7 +4,6 @@ from __future__ import division
 
 SAMPLES_PER_SECOND = 1.0/128.0
 
-
 import math
 import sys
 import gobject
@@ -18,6 +17,7 @@ mainloop = glib.MainLoop()
 data_x = []
 data_y = []
 level = None
+
 
 def log(*args):
     print "\n".join(args)
@@ -139,11 +139,19 @@ def on_error(bus, msg):
     log('on_error: %s' %error[1])
 
     mainloop.quit()
-
-
-d = pipeline = gst.parse_launch("filesrc name=source ! decodebin2 ! level name=level ! fakesink")
+ADD = ""
+if len(sys.argv) >= 3:
+    print sys.argv[2]
+    ADD = "t. ! queue ! audioconvert ! vorbisenc ! oggmux ! filesink name=ogg t. ! queue ! audioconvert ! lame ! filesink name=mp3"
+print ADD
+d = pipeline = gst.parse_launch("filesrc name=source ! decodebin2  ! tee name=t ! queue ! level name=level ! fakesink " + ADD)
 source = d.get_by_name("source")
 level = d.get_by_name("level")
+
+if ADD:
+    d.get_by_name("mp3").set_property("location", sys.argv[2] + ".mp3")
+    d.get_by_name("ogg").set_property("location", sys.argv[2] + ".ogg")
+
 globals()["level"] = level
 #level.
 bus = d.get_bus()
