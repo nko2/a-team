@@ -3,7 +3,7 @@
 body
     font-family: sans-serif
     color: white
-    background-color: #333
+    background-color: #222
     margin: 0
     padding: 0
     background: url('wallpaper.png')
