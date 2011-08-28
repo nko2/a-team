@@ -1,7 +1,7 @@
 WaveformView = require('./waveform')
 CueView = require('./cue')
 { Podcast } = require('../models/podcast')
-{ Cue } = require('../models/cue')
+{ Cue, CueCollection } = require('../models/cue')
 Backbone = require('backbone')
 Timefmt = require('../timefmt')
 
@@ -10,8 +10,6 @@ Backbone.sync = require('../models/sync')
 class ContentView extends Backbone.View
     initialize: (@url) ->
         @podcast = new Podcast( podurl: @url )
-        @podcast.get('cues').bind 'add', (cue) =>
-            @newCue cue
         @podcast.bind 'update', =>
             prefix = @podcast.get('prefix')
             addAudio = (href) ->
@@ -67,17 +65,11 @@ class ContentView extends Backbone.View
         @realign()
 
     remotePushed: (obj) ->
-        console.log 'got pushed', obj
         if obj.type is 'podcast'
             @podcast.set obj
         if CATEGORIES.indexOf(obj.type) >= 0
             found = false
-            @podcast.cues.forEach (cue) ->
-                if cue.uid is obj.uid
-                    cue.set obj
-                    found = true
-            unless found
-                @podcast.cues.add cue
+            @newCue new Cue(obj)
 
     events:
         'click #play': 'clickPlay'

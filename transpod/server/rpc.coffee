@@ -65,6 +65,19 @@ rpc_handler = (io) ->
                     console.log("run check", obj)
                     obj.check (ok) =>
                         console.log("check ok")
+                    pushCues = (key) ->
+                        cues = obj.get(key)
+                        a = {}
+                        a[key] = null
+                        obj.set a
+                        for own cueId, cue of cues
+                            cue.podurl = url
+                            cue.type = key
+                            socket.emit 'push', cue
+                    pushCues 'chapter'
+                    pushCues 'comment'
+                    pushCues 'note'
+                    pushCues 'transcript'
                     pushAll url, obj.toJSON()
         socket.on 'setValues', (data) ->
             url = data.podurl
