@@ -82,6 +82,7 @@ class ContentView extends Backbone.View
         'mousedown #waveform': 'seekStart'
         'mousemove #waveform': 'seekMove'
         'mouseup #waveform': 'seekStop'
+        'click #center': 'zoomCenter'
 
     mouseup: (ev) ->
         @dragStop ev
@@ -110,6 +111,14 @@ class ContentView extends Backbone.View
     zoomOut: (ev) ->
         ev.preventDefault()
         @startZooming -0.02
+
+    zoomCenter: (ev) ->
+        ev.preventDefault()
+        if isNaN(@audio.currentTime)
+            return
+
+        zoomSpan = @zoomEnd - @zoomStart
+        @zoomTo @audio.currentTime - zoomSpan / 2, @audio.currentTime + zoomSpan / 2
 
     getFullWidth: ->
         winWidth = @el.innerWidth()
