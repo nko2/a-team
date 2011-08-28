@@ -9,6 +9,7 @@ query = require('querystring')
 _ = require('underscore')
 { Downloader } = require('../downloader')
 spawn = require('child_process').spawn
+Waveform = require('../waveform_render')
 
 console.log("podcast", Podcast, PodcastCollection)
 
@@ -39,7 +40,7 @@ class Converter extends EventEmitter
 
         child.on 'exit', (code) =>
             callback(code, this)
-        
+
 
 
 class ServerPodcast extends Podcast
@@ -53,8 +54,12 @@ class ServerPodcast extends Podcast
                 @download (err) =>
                     if not err
                         conv = new Converter(@get("sourcefile"))
+                        render = new Waveform.SeriesRenderer()
+                        render.on 'image', (png, start, stop) ->
+                            fs.writeFileSync "/tmp/transpod-#{start}-#{stop}.png", png
                         conv.on "sample", (value) =>
-                            # FIXME ASTRO
+                            console.log 'render write', value
+                            render.write(value)
                             true
 
                         conv.run (err, n) =>
@@ -103,7 +108,7 @@ class ServerPodcast extends Podcast
             if parseInt(progress)%10 == 0
                 @set "progress": progress
                 @save()
-                
+
 
     _id: () =>
         console.log "_id", safe_url(@get("podurl"))
@@ -139,7 +144,7 @@ class ServerPodcast extends Podcast
                         nv[key] = value
                 for own key, value of @get(c)
                     nv[key] = value
-                
+
                 doc[c] = nv
                 @set c:nv
             console.log("done", doc)
@@ -148,7 +153,7 @@ class ServerPodcast extends Podcast
                 if res and res[0] and res[0].rev
                     true
                     @set _rev:res[0].rev
-                    
+
                 callback err, res
 
 

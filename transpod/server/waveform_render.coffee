@@ -1,5 +1,5 @@
 spawn = require('child_process').spawn
-{EventEmitter} = require('event')
+{EventEmitter} = require('events')
 {Png} = require('png')
 
 W = 128
@@ -36,7 +36,7 @@ class Image extends EventEmitter
         for y in [y1..(H - 1)]
             putPixel x, y, 127, 127, 255
 
-    putPixel: (x, y, r, g, b)
+    putPixel: (x, y, r, g, b) ->
             rgb[(x + y * W) * 3] = r
             rgb[(x + y * W) * 3] = g
             rgb[(x + y * W) * 3] = b
