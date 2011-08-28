@@ -69,7 +69,7 @@ design db, (err) ->
         javascript = browserify
             require: requires
             watch: true
-            #fastmatch: true
+            fastmatch: true
 
         backbone = path.join(__dirname, '..', '..', "node_modules", "backbone", "backbone.js")
         javascript.register 'pre', ->
