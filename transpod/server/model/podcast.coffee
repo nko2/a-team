@@ -9,6 +9,9 @@ _ = require('underscore')
 
 console.log("podcast", Podcast, PodcastCollection)
 
+safe_url = (url) ->
+    return query.escape(url).replace(/\%/g,"_")
+
 class ServerPodcast extends Podcast
     filename: (typ) =>
         rv = Path.join(Config.podcast_data, @id, typ)
@@ -52,29 +55,51 @@ class ServerPodcast extends Podcast
                 
 
     _id: () =>
-        console.log "_id", query.escape(@get("podurl"))
-        rv =  "podcast/" + query.escape(@get("podurl"))
+        console.log "_id", safe_url(@get("podurl"))
+        rv =  "podcast_" + safe_url(@get("podurl"))
         console.log(rv)
         return rv
 
     save: (callback) =>
         console.log("save model")
+        if not @get("podurl")
+            throw new Error("podurl is required")
+        changed = @changedAttributes()
+        console.log("changed", changed)
         data = @toJSON()
         data["_id"] = @_id()
         data["type"] = "podcast"
+        is_new = not data["_rev"]
         data["id"] = data["name"] = @get("podurl")
         console.log("data", data, @_id())
-        Config.db.save [data], data, (err, res) ->
-            console.log("saved error:", err, res)
-            callback(err, res) if callback
+        console.log "ServerPodcast", @
+        if is_new
+            Config.db.save [data], data, (err, res) =>
+                console.log("saved error:", err, res)
+                if res
+                    @set "_rev":(res.rev or "xxx")
+                callback(err, res) if callback
+        else
+            console.log("merge")
+            #delete data["_id"]
+            #delete data["id"]
+            console.log(data)
+            # data["_rev"]
+            ndata = { _id: data._id }
+            ndata["progress"] = data.progress
+            Config.db.merge ndata, (err, res) =>
+                console.log("merge saved error:", err, res)
+                if res
+                    @set "_rev":(res.rev or "xxx")
+                callback(err, this) if callback
 
 class ServerPodcastCollection extends PodcastCollection
     get_for_url: (url, callback) ->
-        _id = "podcast/" + query.escape(url)
+        _id = "podcast_" + safe_url(url)
         console.log("request", _id)
         Config.db.get [_id], (err, doc) =>
             console.log("err", err, doc)
-            if err or not doc or not doc.length
+            if err or not doc or doc[0].error
                  return callback err, null
             pod = new ServerPodcast doc[0].doc
             callback err, pod
