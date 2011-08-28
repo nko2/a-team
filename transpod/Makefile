@@ -13,7 +13,7 @@ public/css.css:
 public/jquery.js:
 	cp ../node_modules/jquery/dist/node-jquery.min.js $@
 
-compile:
+compile: 
 	$(COFFEE) -c `find server -name \*.coffee`
 	$(COFFEE) -c `find app -name \*.coffee`
 	cat app/models/cue.js `find app -name \?\*.js` > $@
@@ -33,4 +33,4 @@ clean:
 test:
 	@echo "populate me"
 
-.PHONY: test server
+.PHONY: test server compile

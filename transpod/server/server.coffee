@@ -28,7 +28,7 @@ couch = require('backbone-couch')
     name: 'transpod'
 
 config.db = db = new(cradle.Connection)({
-    cache: true,
+    cache: false,
     raw: false
 }).database('transpod')
 

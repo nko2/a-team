@@ -1,6 +1,8 @@
 Backbone = require("backbone")
 { Cue, CueCollection } = require('./cue')
 
+WHITELIST = ["author", "guests", "homepage", "episode", "series", "location", "date"]
+
 class Podcast extends Backbone.Model
     defaults:
         url: null
@@ -9,8 +11,8 @@ class Podcast extends Backbone.Model
 
     initialize: ->
         @set cues: new CueCollection()
-        socket.of('/podcast').on 'push', (o) =>
-            console.log "got pushed", o
+        #socket.of('/podcast').on 'push', (o) =>
+        #    console.log "got pushed", o
 
 class PodcastCollection extends Backbone.Collection
     model: Podcast
@@ -29,5 +31,5 @@ class PodcastCollection extends Backbone.Collection
 @Podcast = Podcast
 @PodcastCollection = PodcastCollection
 
-module.exports = { Podcast, PodcastCollection }
+module.exports = { Podcast, PodcastCollection, WHITELIST }
 

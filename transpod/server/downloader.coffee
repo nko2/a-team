@@ -35,7 +35,7 @@ class Downloader extends EventEmitter
             return callback("already in progress", null)
         else
             LOCKS[@outfile] = this
-        dl = spawn('wget', ['-P ' + @outputDir, '-O', @outfile, url])
+        dl = spawn('wget', ['-c', '-P ' + @outputDir, '-O', @outfile, url])
         #dl.on 'exit', (code) =>
         #    console.log('child process exited with code ' + code)
         #    callback(code)
