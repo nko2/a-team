@@ -3,9 +3,9 @@
 { guid } = require('../app/models/cue')
 url = require('url')
 check = require('validator').check
+_ = require('underscore')
 
 
-console.log(ServerPodcast, ServerPodcastCollection)
 podcast_collections = new ServerPodcastCollection()
 
 podcastListeners = {}
@@ -103,13 +103,14 @@ rpc_handler = (io) ->
 
                 typename = cue.type
                 cur = obj.get(typename)
-                if not cur
+                if not cur or _.isObject(cur)
                     cur = {}
                 if not cue.uid
                     cue.uid = guid()
-                cur[cue.uid] = cue
+                nid = cue.uid
+                cur[nid] = cue
                 vars = {}
-                vars[typename] = cue
+                vars[typename] = cur
                 obj.set(vars)
                 obj.save()
 
