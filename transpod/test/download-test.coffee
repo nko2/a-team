@@ -20,7 +20,7 @@ tests = vows.describe('download tests').addBatch [
             d.on "progress", (prog) =>
                 console.log("progress", prog)
                 @progress = prog
-            
+
             console.log("test")
             return
         "schould ok": (ok) ->

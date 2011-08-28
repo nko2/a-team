@@ -48,7 +48,7 @@ class Image extends EventEmitter
 
 
 class SeriesRenderer extends EventEmitter
-    constructor: (minSampling=1, maxSampling=600) ->
+    constructor: (minSampling=1, maxSampling=512) ->
         @sample = 0
         sampling = minSampling
         while sampling <= maxSampling

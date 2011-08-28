@@ -54,6 +54,7 @@ class ContentView extends Backbone.View
         @timehints.end.hide()
 
         @cueViews = []
+        @waveViews = []
         @realign()
 
     remotePushed: (obj) ->
@@ -68,22 +69,6 @@ class ContentView extends Backbone.View
                     found = true
             unless found
                 @podcast.cues.add cue
-
-    newCue: (cue) ->
-        if _.any(@cueViews, (view) -> view.model is cue)
-            return
-
-        view = new CueView @, cue
-        @moveCue view
-        @cueViews.push view
-        view.onEdit = =>
-            # When its clicked
-            for view1 in @cueViews
-                # All other views
-                unless view1 is view
-                    # Shall close their edit inputs
-                    view1.editDone()
-        view
 
     events:
         'click #play': 'clickPlay'
@@ -166,7 +151,24 @@ class ContentView extends Backbone.View
         for view in @cueViews
             @moveCue view
 
+        @updateWaves()
         @updateSeeker()
+
+    newCue: (cue) ->
+        if _.any(@cueViews, (view) -> view.model is cue)
+            return
+
+        view = new CueView @, cue
+        @moveCue view
+        @cueViews.push view
+        view.onEdit = =>
+            # When its clicked
+            for view1 in @cueViews
+                # All other views
+                unless view1 is view
+                    # Shall close their edit inputs
+                    view1.editDone()
+        view
 
     moveCue: (view) ->
         fullWidth = @getFullWidth()
@@ -188,6 +190,7 @@ class ContentView extends Backbone.View
         right = left + winWidth
         @zoomStart = left * @length / fullWidth
         @zoomEnd = right * @length / fullWidth
+        @updateWaves()
         @emitZoomUpdate()
 
     realign: ->
@@ -312,6 +315,65 @@ class ContentView extends Backbone.View
 
     seekStop: (ev) ->
         delete @seeking
+
+    updateWaves: ->
+        console.log "updateWaves"
+        # Clean-up
+        @waveViews = @waveViews.filter (view) ->
+            if view.end < @zoomStart or view.start > @zoomEnd
+                view.el.detach()
+                false
+            else
+                true
+
+        # Iterate through all eligible for display
+        WAVE_WIDTH = 128
+        WAVE_MIN_DETAIL = 1
+        WAVE_MAX_DETAIL = 512
+        waveSeries = (detail) =>
+            ts = []
+            t = Math.floor(@zoomStart / detail) * detail
+            while t < @zoomEnd
+                ts.push t
+                t += detail
+            ts
+
+        detail = WAVE_MAX_DETAIL
+        fits = false
+        while detail >= WAVE_MIN_DETAIL and !fits
+            for t in waveSeries(detail)
+                # Ensure existence
+                view = @getWaveView t, t+detail
+                left = @getFullWidth() * view.start / @length
+                width = @getFullWidth() * (view.end - view.start) / @length
+                fits &&= width <= WAVE_WIDTH
+                view.el.css('left', "#{Math.floor left}px").
+                    css('width', "#{Math.floor width}")
+                view.el
+            detail /= 2
+
+    getWaveView: (start, end) ->
+        start = Math.floor(start)
+        end = Math.ceil(end)
+        match = @waveViews.filter (view) ->
+            view.start is start and view.end is end
+        if match[0]?
+            match[0]
+        else
+            console.log "new wave #{start}..#{end}"
+            view = new WaveView(start, end)
+            @el.append view.el
+            @waveViews.push view
+            view
+
+class WaveView extends Backbone.View
+    constructor: (@start, @end) ->
+        #@el = $('<img class="wave">')
+        #@el.attr 'src' # TODO
+        @el = $("<p class='wave'>#{start}-#{end}</p>")
+        @el.css 'z-index', "#{Math.ceil 1000/(end-start)}"
+        super()
+
 
 module.exports = ContentView
 
