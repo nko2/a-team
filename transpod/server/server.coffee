@@ -22,10 +22,10 @@ kue = require('kue')
 
 app = express.createServer()
 
-#couch = require('backbone-couch')
-#    host: '127.0.0.1',
-#    port: '5984',
-#    name: 'transpod'
+couch = require('backbone-couch')
+    host: '127.0.0.1',
+    port: '5984',
+    name: 'transpod'
 
 config.db = db = new(cradle.Connection)({
     cache: true,
@@ -84,8 +84,8 @@ design db, (err) ->
 
         # Create database, push default design documents to it and
         # assign sync method to Backbone.
-        #couch.install (err) ->
-        #  Backbone.sync = couch.sync
+        couch.install (err) ->
+            Backbone.sync = couch.sync
 
         #connect.router (app) ->
         Routes(app)

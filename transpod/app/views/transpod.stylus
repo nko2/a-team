@@ -12,6 +12,7 @@ h1
     font-weight: bolder
     font-variant: small-caps
     min-height: 132px
+    text-shadow: 4px 4px 0 black
 
 h1:before
     content: url("transpod.png")
@@ -85,6 +86,7 @@ h2
     text-align: center
 
 #content
+    cursor: crosshair
     position: absolute
     margin: 0 auto
     padding: 0
@@ -96,14 +98,7 @@ h2
     min-height: 30em
 
     border-radius: 6px
-    scrollbar-base-color: #333
-    scrollbar-3dlight-color: white
-    scrollbar-arrow-color: white
-    scrollbar-darkshadow-color: black
-    scrollbar-face-color: #333
-    scrollbar-highlight-color: #ccc
-    scrollbar-shadow-color: black
-    scrollbar-track-color: #333
+    box-shadow: 0 4px 24px black
 
 #content > *
     position: absolute
@@ -113,6 +108,13 @@ h2
     content: overflow
     min-width: 10em
     position: fixed
+
+#playtime
+    color: white
+    font-weight: bolder
+    opacity: 0.7
+    font-size: 70%
+    margin-right: 4em
 
 .button
     cursor: pointer
@@ -129,10 +131,35 @@ h2
     background-color: #333
 
 #waveform
+    background-color: #226
+    top: 148px
     height: 128px
+    position: fixed
+    width: 90%
+    left: 5%
+    right: 5%
+    padding: 0
+    margin: 0
+    cursor: crosshair
+
+#waveselection
+    top: 8px
+    height: 128px
+    opacity: 0.5
+    background-color: #77e
+    border-left: 1px solid #fff
+    border-right: 1px solid #fff
+    z-index: 9
+
+#seeker
+    top: 8px
+    height: 128px
+    width: 1px
+    background-color: #ffa
+    z-index: 10
+    
 
 #dummy
-    opacity: 0
     width: 1px
 
 #content h3
@@ -149,10 +176,13 @@ h2
     background-color: white
     border: 1px solid black
     font-size: 90%
+    height: 1.6em
     overflow: hidden
-    height: 1.2em
+    white-space: nowrap
+    box-shadow: 2px 2px 0 #333
 .cue .text
-    padding: 0.1em 0
+    padding: 0.3em 3px
+    display: block
 
 .chapter
     background: #d1e linear-gradient(top, #e6f, #fff 40%, #faf 70%, #d1e)
@@ -164,11 +194,11 @@ h2
     background: #b72 linear-gradient(top, #fe6, #fff 40%, #fca 70%, #b72)
 
 .grab
-    position: relative
-    height: 1.2em
+    position: absolute
     background-color: #ccc
-    width: 1px
+    width: 3px
     top: 0
+    bottom: 0
     padding: 0
     margin: 0
     opacity: 0.5
@@ -181,3 +211,9 @@ h2
 .grabend
     right: 0
     cursor: e-resize
+
+.timehint
+    color: white
+    font-weight: bolder
+    opacity: 0.7
+    font-size: 70%

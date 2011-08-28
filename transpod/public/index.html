@@ -62,16 +62,21 @@ You, Sir, need to enable JavaScript!
 <div id="content">
   <p id="buttons">
     <a id="play" class="button" title="play">▶</a>
+    <span id="playtime"></span>
     <a id="zoomin" class="button" title="Zoom In">⊕</a>
     <a id="zoomout" class="button" title="Zoom Out">⊖</a>
   </p>
-  <canvas id="waveform" height="128px"></canvas>
-  <div id="dummy">x</div>
+  <canvas id="waveform" height="128px" class="wave"></canvas>
+  <div id="waveselection" class="wave">&nbsp;</div>
+  <div id="seeker" class="wave">&nbsp;</div>
+  <p id="starthint" class="timehint"></p>
+  <p id="endhint" class="timehint"></p>
+  <div id="dummy">&nbsp;</div>
   <h3>
   Chapter Marks
   </h3>
   <h3>
-  Transcription
+  Transcript
   </h3>
   <h3>
   Show Notes

@@ -1,25 +1,16 @@
 Backbone = require("backbone")
-{ Chapter, ChapterCollection } = require('./chapter')
-{ Note, NoteCollection } = require('./note')
-{ Comment, CommentCollection } = require('./comment')
-{ Transcription, TranscriptionCollection } = require('./chapter')
+{ Cue, CueCollection } = require('./cue')
 
 class Podcast extends Backbone.Model
-  # required:
-  # url
-  # author
-  defaults:
-    "url":      null
-    "author":   "unknown"
-    "guests":   []
+    defaults:
+        url: null
+        author: "unknown"
+        guests: []
 
-  initialize: ->
-    # ...
-    chapters = ChapterCollection
-    notes = NoteCollection
-    transcription = TranscriptionCollection
-    comments = CommentCollection
-
+    initialize: ->
+        @set cues: new CueCollection()
+        socket.of('/podcast').on 'push', (o) =>
+            console.log "got pushed", o
 
 class PodcastCollection extends Backbone.Collection
     model: Podcast
