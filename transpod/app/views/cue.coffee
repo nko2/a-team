@@ -1,6 +1,6 @@
 class CueView extends Backbone.View
     constructor: (@contentView, @model) ->
-        @el = $('<p class="cue"><span class="grab grabstart" title="Drag to change cue start">&nbsp;</span><span class="text" contentEditable="true" title="Edit cue text. Clear all to remove."></span><span class="grab grabend" title="Drag to change cue end">&nbsp;</span></p>')
+        @el = $('<p class="cue"><span class="grab grabstart" title="Drag to change cue start">&nbsp;</span><span class="text" contentEditable="true" title="Edit cue text. Clear all to remove."></span><a class="edit" title="Edit">☑</a><span class="grab grabend" title="Drag to change cue end">&nbsp;</span></p>')
         @$('.text').text("Hello World #{Math.ceil(Math.random() * 23)}")
         $('#content').append(@el)
 
