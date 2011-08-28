@@ -184,10 +184,10 @@ class ContentView extends Backbone.View
     realign: ->
         # Fixed stuff:
         top = $(window).scrollTop() + @el.scrollTop()
-        @$('#waveform').css('top', "#{148 - top}px")
-        @$('#buttons').css('top', "#{278 - top}px")
+        @$('#waveform').css('top', "#{142 - top}px")
+        @$('#buttons').css('top', "#{72 - top}px")
         @$('h3').each (i) ->
-            $(@).css('top', "#{122 - top + categoryToY(i)}px")
+            $(@).css('top', "#{114 - top + categoryToY(i)}px")
 
     emitZoomUpdate: ->
         if @onZoomUpdate
@@ -297,14 +297,15 @@ class ContentView extends Backbone.View
 module.exports = ContentView
 
 CATEGORIES = ['chapter', 'transcription', 'note', 'comment']
+CATEGORIES_OFFSET = 10 + 128 + 10 + 34
 
 categoryToY = (category) ->
     if typeof category is 'string'
         i = Math.max 0, CATEGORIES.indexOf(category)
     else
         i = category
-    192 + 48 * i
+    CATEGORIES_OFFSET + 48 * i
 
 yToCategory = (y) ->
-    y -= 192
+    y -= CATEGORIES_OFFSET
     CATEGORIES[Math.floor(y / 48)]

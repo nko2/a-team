@@ -4,14 +4,17 @@ body
     font-family: sans-serif
     color: white
     background-color: #333
+    margin: 0
+    padding: 0
 
 h1
     margin: 0 auto
+    padding: 0
     text-align: center
-    font-size: 600%
+    font-size: 80px
     font-weight: bolder
     font-variant: small-caps
-    min-height: 132px
+    min-height: 80px
     text-shadow: 4px 4px 0 black
 
 h1:before
@@ -96,6 +99,7 @@ h2
     color: black
     background-color: #777
     min-height: 400px
+    top: 132px
 
     border-radius: 6px
     box-shadow: 0 4px 24px black
@@ -104,7 +108,10 @@ h2
     position: absolute
 
 #buttons
-    left: 8%
+    right: 8%
+    top: 72px
+    font-size: 20px
+    height: 28px
     content: overflow
     min-width: 10em
     position: fixed
@@ -132,7 +139,7 @@ h2
 
 #waveform
     background-color: #226
-    top: 148px
+    top: 142px
     height: 128px
     position: fixed
     width: 90%
@@ -152,7 +159,7 @@ h2
     z-index: 9
 
 #seeker
-    top: 8px
+    top: 10px
     height: 128px
     width: 1px
     background-color: #ffa
