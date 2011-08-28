@@ -91,6 +91,8 @@ class ContentView extends Backbone.View
         'mousedown #zoomout': 'zoomOut'
         'mouseup #zoomin': 'stopZooming'
         'mouseup #zoomout': 'stopZooming'
+        'mouseout #zoomin': 'stopZooming'
+        'mouseout #zoomout': 'stopZooming'
         'mousemove': 'drag'
         'mouseup': 'mouseup'
         'mousedown': 'pointCreate'
