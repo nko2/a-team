@@ -296,7 +296,7 @@ class ContentView extends Backbone.View
 
 module.exports = ContentView
 
-CATEGORIES = ['chapter', 'transcription', 'note', 'comment']
+CATEGORIES = ['chapter', 'transcript', 'note', 'comment']
 CATEGORIES_OFFSET = 10 + 128 + 10 + 34
 
 categoryToY = (category) ->

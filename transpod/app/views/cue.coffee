@@ -9,9 +9,13 @@ class CueView extends Backbone.View
         super()
 
         @model.bind 'change', =>
-            @contentView.moveCue @
-            @$('.text').text @model.get('text')
+            @render()
         @el.addClass @model.get('type')
+
+    render: ->
+        @contentView.moveCue @
+        @$('.text').text @model.get('text')
+        @$('.text').attr 'title', "Edit: “#{@model.get('text')}”"
 
     events:
         'mousedown .grabstart': 'dragStart'
@@ -19,20 +23,21 @@ class CueView extends Backbone.View
         'mousemove': 'drag'
         'mouseup': 'dragStop'
         'mouseeup .grab': 'dragStop'
-        'click .edit': 'clickEdit'
+        'click .text': 'clickEdit'
 
     clickEdit: (ev) ->
         if ev
             ev.preventDefault()
 
-        @$('.text, .edit').addClass 'hidden'
+        @$('.text').hide()
         unless @form
             @form = new EditForm(@model.get('text'))
             @el.append @form.el
             @form.onOkay = (text) =>
                 @model.set text: text
                 @model.save()
-                @$('.text, .edit').removeClass 'hidden'
+                @render()
+                @$('.text').fadeIn(500)
                 delete @form
 
     # Move whole cue
@@ -62,7 +67,7 @@ class CueView extends Backbone.View
 
 class EditForm extends Backbone.View
     constructor: (text) ->
-        @el = $('<form><input class="edittext"><input class="editok" type="submit" value="Ok"></form>')
+        @el = $('<form><input class="edittext"></form>')
         super()
         @$('.edittext').val text
         # After attaching to DOM
@@ -72,12 +77,11 @@ class EditForm extends Backbone.View
         , 1
 
     fit: ->
-        @$('.edittext').css 'width', "#{@el.innerWidth() - @$('.editok').outerWidth() - 10}px"
+        @$('.edittext').css 'width', "#{@el.innerWidth() - 6}px"
 
     events:
         'keypress .edittext': 'textkey'
         'keydown .edittext': 'textkey'
-        'click .editok': 'okay'
         'submit': 'okay'
 
     textkey: (ev) ->
