@@ -22,6 +22,9 @@ compile:
 server: public/css.css files
 	../node_modules/.bin/coffee server/server.coffee
 
+jobserver: public/css.css files
+	../node_modules/.bin/coffee server/jobs.coffee
+
 clean:
 	find app -name "*.js" -exec rm {} \;
 	find server -name "*.js" -exec rm {} \;

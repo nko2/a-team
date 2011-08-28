@@ -63,6 +63,19 @@ class ServerPodcast extends Podcast
         return Path.join(prefix, @_id(), suffix)
 
     check: (callback) =>
+        create_job = () =>
+            Config.jobs.create("download", url:@get("podurl")).save()
+            callback(null, this)
+        Path.exists @generate_filename("audio.mp3"), (exists) =>
+            if not exists
+                create_job()
+            else
+                Path.exists @generate_filename("audio.ogg"), (exists) =>
+                    if not exists
+                        create_job()
+                    else
+                        callback(null, this)
+        ###
         console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
         console.log(@generate_filename("audio.mp3"))
         checked = (exists) =>
@@ -76,6 +89,7 @@ class ServerPodcast extends Podcast
             checked(false)
         else
             Path.exists @get("source_file"), checked
+        ###
 
     download: (callback) =>
         console.log("download file #{@get('podurl')}")
