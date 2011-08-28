@@ -82,8 +82,11 @@ class ContentView extends Backbone.View
         'mouseup': 'mouseup'
         'mousedown': 'pointCreate'
         'mousedown #waveform': 'seekStart'
+        'mousedown .wave': 'seekStart'
         'mousemove #waveform': 'seekMove'
+        'mousemove .wave': 'seekMove'
         'mouseup #waveform': 'seekStop'
+        'mouseup .wave': 'seekStop'
         'click #center': 'zoomCenter'
 
     mouseup: (ev) ->
@@ -309,8 +312,11 @@ class ContentView extends Backbone.View
     seekMove: (ev) ->
         unless @seeking
             return
+        ev.preventDefault()
 
-        @audio.currentTime = @length * ((ev.offsetX or ev.layerX) + @el.scrollLeft()) / @getFullWidth()
+        # For fixed #waveform:
+        #@audio.currentTime = @length * ((ev.offsetX or ev.layerX) + @el.scrollLeft()) / @getFullWidth()
+        @audio.currentTime = @length * ((ev.offsetX or ev.layerX) + ev.target.offsetLeft) / @getFullWidth()
         @startPlayTimer()
 
     seekStop: (ev) ->
