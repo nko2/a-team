@@ -183,6 +183,20 @@ h2
 .cue .text
     padding: 0.3em 3px
     display: block
+.cue .edit
+    display: none
+.cue:hover .edit
+    display: inline
+    cursor: pointer
+    position: absolute
+    top: 0.1em
+    right: 1px
+    color: #060
+    font-weight: bolder
+    font-size: 130%
+.cue .edit:hover
+    color: black
+    text-shadow: 1px 1px 1px black
 
 .chapter
     background: #d1e linear-gradient(top, #e6f, #fff 40%, #faf 70%, #d1e)
