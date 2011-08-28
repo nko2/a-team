@@ -9,15 +9,7 @@
 window._ = require('underscore');
 window.$ = require('jquery');
 window.Backbone = require('backbone');
-socket = io.connect('', {heartbeat: true, resource: "websocket"});
-socket.of("/podcast").on("error", function(error) {
-        console.log("error received:", error)
-        });
-
-socket.of("/podcast").on("push", function(obj) {
-        console.log("got podcast pushed:", obj)
-        });
-
+socket = io.connect(null, {heartbeat: true, resource: "websocket"});
 require('./router');
 </script>
 </head>

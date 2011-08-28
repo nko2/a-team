@@ -9,7 +9,7 @@ console.log(ServerPodcast, ServerPodcastCollection)
 
 
 rpc_handler = (io) ->
-    io.of('/podcast').on 'connection', (socket) ->
+    io.sockets.on 'connection', (socket) ->
         console.log 'client connection', socket
 
         socket.on 'list', (start, stop) ->

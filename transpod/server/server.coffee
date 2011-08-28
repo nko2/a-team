@@ -99,7 +99,7 @@ design db, (err) ->
         io.set('log level', 3)
         io.set('close timeout', 5000)
         io.set('resource', "/websocket")
-        io.set('transports', ["xhr-polling", "htmlfile", "json-polling"]) #["websocket", "xhr-polling", "htmlfile", "json-polling"])
+        io.set('transports', ["websocket", "xhr-polling", "htmlfile", "json-polling"]) #["websocket", "xhr-polling", "htmlfile", "json-polling"])
         io.set('heartbeat timeout': 60)
         #io.set('store', session_store)
 
