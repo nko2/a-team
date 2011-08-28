@@ -98,7 +98,7 @@ h2
     overflow: auto
     color: black
     background-color: #777
-    min-height: 400px
+    min-height: 500px
     top: 132px
 
     border-radius: 6px
@@ -184,12 +184,12 @@ h2
     background-color: white
     border: 1px solid black
     font-size: 90%
-    height: 1.6em
+    height: 2em
     overflow: hidden
     white-space: nowrap
     box-shadow: 2px 2px 0 #333
 .cue .text
-    padding: 0.3em 3px
+    padding: 0.5em 3px
     display: block
 
 .chapter
@@ -229,12 +229,9 @@ h2
     font-size: 70%
 
 .cue input
-    padding: 0
-    margin: 0
-    display: block
-    text-size: 75%
-
-.cue .edittext
     position: relative
-    left: 2px
-    //top: 1px
+    top: 0.4em
+    left: 4px
+    padding: 0
+    border: 1px dotted #333
+
