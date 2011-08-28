@@ -4,6 +4,8 @@ Path = require('path')
 fs = require('fs')
 Url = require('url')
 query = require('querystring')
+_ = require('underscore')
+{ Downloader } = require('../downloader')
 
 console.log("podcast", Podcast, PodcastCollection)
 
@@ -12,18 +14,42 @@ class ServerPodcast extends Podcast
         rv = Path.join(Config.podcast_data, @id, typ)
         return rv
     check: (callback) =>
-        Path.exists Path.join(Config.podcast_data, @id, "done"), (exists) ->
+        Path.exists Path.join(Config.podcast_data, @id, "done"), (exists) =>
             if exists
                 return callback(null, true)
-    download: () =>
+            else
+                @download callback
+
+    download: (callback) =>
         console.log("download file")
 
-        options = Url.parse(@url).filter (name) -> return name in ['host', 'port', 'path']
+        nd = new Downloader
+        console.log(Config.podcast_data)
+        nd.setOutput(Config.podcast_data)
+        nd.download(@get("podurl")) #Url.parse(@get("podurl")).href)
 
-        fetcher = http.get options, (res) =>
-              console.log("Got response: " + res.statusCode)
-        fetcher.on 'error', (err) ->
-              console.log("Got error: " + err.message)
+        #options = Url.parse(@get("podurl"))
+        #console.log(options)
+        #o = { host:options.host, port:options.port, path:options.pathname }
+        #o["type"] = "tcp6"
+        #console.log("options", o)
+        #fetcher = http.get o, (res) =>
+        #      console.log("Got response: " + res.statusCode, res)
+        #      callback(null, null)
+        nd.on 'success', =>
+            @set "download":true
+            @save()
+            callback(null, this)
+        nd.on 'failed', (err) =>
+            console.log("Got error: " + err.message)
+            @set "last_error": err
+            @save()
+            callback(err, null)
+        nd.on 'progress', (progress) =>
+            if parseInt(progress)%10 == 0
+                @set "progress": progress
+                @save()
+                
 
     _id: () =>
         console.log "_id", query.escape(@get("podurl"))
@@ -40,7 +66,7 @@ class ServerPodcast extends Podcast
         console.log("data", data, @_id())
         Config.db.save [data], data, (err, res) ->
             console.log("saved error:", err, res)
-            callback(err, res)
+            callback(err, res) if callback
 
 class ServerPodcastCollection extends PodcastCollection
     get_for_url: (url, callback) ->
