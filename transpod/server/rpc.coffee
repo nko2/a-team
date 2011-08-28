@@ -6,6 +6,7 @@ check = require('validator').check
 
 
 console.log(ServerPodcast, ServerPodcastCollection)
+podcast_collections = new ServerPodcastCollection()
 
 
 rpc_handler = (io) ->
@@ -19,7 +20,6 @@ rpc_handler = (io) ->
             console.log("get podcast url:", url)
 
             try
-                url = url.url
                 console.log("rulr",url)
                 check(url).isUrl()
             catch error
@@ -43,6 +43,7 @@ rpc_handler = (io) ->
                     console.log("run check", obj)
                     obj.check (ok) =>
                         console.log("check ok")
+                    # TODO: push to all podcast listeners
                     socket.emit 'push', obj.toJSON()
         socket.on 'setValues', (data) ->
             url = data.url
@@ -63,7 +64,9 @@ rpc_handler = (io) ->
                         vars = {}
                         vars[key] = value
                         obj.set(vars)
+                        obj.save()
                 obj.save (err, nobj)=>
+                    # TODO: push to all podcast listeners
                     socket.emit 'push', nobj.toJSON()
 
 
@@ -88,9 +91,10 @@ rpc_handler = (io) ->
                 vars = {}
                 vars[typename] = cue
                 obj.set(vars)
-
+                obj.save()
 
                 unless err
+                    # TODO: push to all podcast listeners
                     socket.emit 'push', obj.toJSON()
                 obj.save()
 

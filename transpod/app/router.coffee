@@ -31,5 +31,8 @@ $(document).ready ->
             @contentView.el.slideDown(200)
             @welcomeView.el.slideUp(200)
 
+            socket.on 'push', (obj) =>
+                @contentView.remotePushed obj
+
     router = new Router()
 

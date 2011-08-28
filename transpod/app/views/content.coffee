@@ -61,6 +61,9 @@ class ContentView extends Backbone.View
         ]
         @realign()
 
+    remotePushed: (obj) ->
+        console.log 'got pushed', obj
+
     newCue: (cue) ->
         if _.any(@cueViews, (view) -> view.model is cue)
             return
