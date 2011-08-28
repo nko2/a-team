@@ -10,6 +10,7 @@ _ = require('underscore')
 { Downloader } = require('../downloader')
 spawn = require('child_process').spawn
 Waveform = require('../waveform_render')
+BufferStream = require('bufferstream')
 
 
 safe_url = (url) ->
@@ -26,13 +27,12 @@ class Converter extends EventEmitter
     run: (callback) =>
         child = spawn("./transcoder/transcode.py", [@sourcefile, @outpath])
 
-        child.stdout.on 'data', (data) =>
+        stream = new BufferStream(encoding: 'ascii', size: 'flexible')
+        stream.split "\n", (line) =>
             child.stdout.pause()
-            data = data.toString('ascii')
-            lines = data.split("\n")
-            for line in lines
-                @emit("sample", Number(line))
+            @emit("sample", Number(line))
             child.stdout.resume()
+        child.stdout.pipe stream
         child.stderr.on 'data', (data) ->
             console.log data
 

@@ -25,7 +25,8 @@
       "jquery" : "*",
       "nib" : "*",
       "validator" : "*",
-      "png": "*"
+      "png": "*",
+      "bufferstream": "*"
   }
   , "main": "index"
   , "engines": { "node": "0.4.x" }
