@@ -16,6 +16,7 @@ public/jquery.js:
 compile: 
 	$(COFFEE) -c `find server -name \*.coffee`
 	$(COFFEE) -c `find app -name \*.coffee`
+	$(COFFEE) -c `find test -name \*.coffee`
 	cat app/models/cue.js `find app -name \?\*.js` > $@
 
 server: public/css.css files
@@ -24,6 +25,7 @@ server: public/css.css files
 clean:
 	find app -name "*.js" -exec rm {} \;
 	find server -name "*.js" -exec rm {} \;
+	find test -name "*.js" -exec rm {} \;
 	rm -f public/app.js public/css.css
 
 test:

@@ -68,3 +68,5 @@ class SeriesRenderer extends EventEmitter
 
             @removeListener 'sample', pipe
             startSampler(sampling)
+
+module.exports = { Image, SeriesRenderer }

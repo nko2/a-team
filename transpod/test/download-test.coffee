@@ -3,6 +3,9 @@ Config = require('../config')
 assert = require('assert')
 { Downloader } = require('../server/downloader')
 { Converter, ServerPodcast } = require('../server/model/podcast')
+Waveform = require('../server/waveform_render')
+console.log("bla", Waveform)
+fs = require('fs')
 
 tests = vows.describe('download tests').addBatch [
     'test download':
@@ -45,11 +48,18 @@ tests = vows.describe('download tests').addBatch [
             c = new Converter("../podcast_data/http_3A_2F_2Fphobos.hq.c3d2.de_2Fpentaradio-2011-07-26.mp3")
             callback = this.callback
             v = 0
-            c.on "sample", (sample) ->
-                #console.log("sample", sample)
+            render = new Waveform.SeriesRenderer()
+            render.on 'image', (png, start, stop) ->
+                fs.writeFileSync "/tmp/transpod-#{start}-#{stop}.png", png
+            console.log("jo") 
+            c.on "sample", (value) =>
+                console.log 'render write', value
+                render.write(value)
                 v += 1
                 if (v % 100) == 0
                     process.stdout.write('.')
+
+                #console.log("sample", sample)
             c.run (err, x) ->
                 console.log("converter done")
                 callback(err, x)

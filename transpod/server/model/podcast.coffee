@@ -11,10 +11,6 @@ _ = require('underscore')
 spawn = require('child_process').spawn
 Waveform = require('../waveform_render')
 
-console.log("podcast", Podcast, PodcastCollection)
-
-console.log( require('../../app/models/cue'))
-
 
 safe_url = (url) ->
     return query.escape(url).replace(/\%/g,"_")
