@@ -98,11 +98,11 @@ h2
     overflow: auto
     color: black
     background-color: #777
-    min-height: 500px
+    min-height: 448px
     top: 132px
 
     border-radius: 6px
-    box-shadow: 0 4px 24px black
+    box-shadow: 0 8px 48px black
 
 #content > *
     position: absolute
