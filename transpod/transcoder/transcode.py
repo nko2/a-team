@@ -142,7 +142,7 @@ def on_error(bus, msg):
 ADD = ""
 if len(sys.argv) >= 3:
     print sys.argv[2]
-    ADD = "t. ! queue ! audioconvert ! vorbisenc ! oggmux ! filesink name=ogg t. ! queue ! audioconvert ! lame ! filesink name=mp3"
+    ADD = "t. ! queue ! audioconvert ! vorbisenc bitrate=128000 ! oggmux ! filesink name=ogg t. ! queue ! audioconvert ! lame bitrate=128 vbr=4 vbr-quality=7 ! filesink name=mp3"
 print ADD
 d = pipeline = gst.parse_launch("filesrc name=source ! decodebin2  ! tee name=t ! queue ! level name=level ! fakesink " + ADD)
 source = d.get_by_name("source")
