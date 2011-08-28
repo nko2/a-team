@@ -96,14 +96,7 @@ h2
     min-height: 30em
 
     border-radius: 6px
-    scrollbar-base-color: #333
-    scrollbar-3dlight-color: white
-    scrollbar-arrow-color: white
-    scrollbar-darkshadow-color: black
-    scrollbar-face-color: #333
-    scrollbar-highlight-color: #ccc
-    scrollbar-shadow-color: black
-    scrollbar-track-color: #333
+    box-shadow: 0 2px 24px black
 
 #content > *
     position: absolute
@@ -130,7 +123,9 @@ h2
     background-color: #333
 
 #waveform
+    top: 4px
     height: 128px
+    background-color: #226
 
 #dummy
     opacity: 0

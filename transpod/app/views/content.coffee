@@ -10,11 +10,7 @@ class ContentView extends Backbone.View
     initialize: (@url) ->
         @podcast = new Podcast( url: @url )
         @podcast.get('cues').bind 'add', (cue) =>
-            view = new CueView @, cue
-            @cueViews.push view
-            if @cueToEdit is cue
-                view.editText()
-                delete @cueToEdit
+            @newCue cue
         @podcast.fetch()
 
         @el = $('#content')
@@ -43,6 +39,15 @@ class ContentView extends Backbone.View
             new CueView(@, new Cue(type: 'note', start: 40, end: 60))
         ]
         @realign()
+
+    newCue: (cue) ->
+        if @cueViews.any((view) -> view.model is cue)
+            return
+
+        view = new CueView @, cue
+        @moveCue view
+        @cueViews.push view
+        view
 
     events:
         'click #zoomin': 'zoomIn'
@@ -112,8 +117,7 @@ class ContentView extends Backbone.View
         left = @el.scrollLeft()
         top = $(window).scrollTop() + @el.scrollTop()
         @waveform.el.css('left', "#{left}px").
-            css('width', "#{@el.innerWidth()}px").
-            css('top', "#{134 - top}.px")
+            css('width', "#{@el.innerWidth()}px")
         @$('#buttons').css('top', "#{278 - top}px")
         @$('h3').each (i) ->
             $(@).css('top', "#{118 - top + categoryToY(i)}px")
@@ -154,10 +158,8 @@ class ContentView extends Backbone.View
         type = yToCategory(ev.offsetY or ev.layerY)
         t = @length * ((ev.offsetX or ev.layerX) + @el.scrollLeft()) / @getFullWidth()
         if type
-            cue = new Cue(type: type, start: t, end: t + 10, podcast: @url)
-            @podcast.get('cues').add cue
-            @cueToEdit = cue
-            cue.save()
+            view = @newCue new Cue(type: type, start: t, end: t + 10, podcast: @url)
+            view.editText()
 
 module.exports = ContentView
 
