@@ -49,7 +49,7 @@ class ContentView extends Backbone.View
         @realign()
 
     newCue: (cue) ->
-        if @cueViews.any((view) -> view.model is cue)
+        if _.any(@cueViews, (view) -> view.model is cue)
             return
 
         view = new CueView @, cue
@@ -58,23 +58,36 @@ class ContentView extends Backbone.View
         view
 
     events:
-        'click #zoomin': 'zoomIn'
-        'dblclick #zoomin': 'zoomIn'
-        'click #zoomout': 'zoomOut'
-        'dblclick #zoomout': 'zoomOut'
+        'mousedown #zoomin': 'zoomIn'
+        'mousedown #zoomout': 'zoomOut'
+        'mouseup #zoomin': 'stopZooming'
+        'mouseup #zoomout': 'stopZooming'
         'mousemove': 'drag'
         'mouseup': 'dragStop'
         'mousedown': 'pointCreate'
 
+    startZooming: (factor) ->
+        zoomSpan = @zoomEnd - @zoomStart
+        @zoomTo @zoomStart + (zoomSpan * factor), @zoomEnd - (zoomSpan * factor)
+
+        unless @zoomTimeout
+            @zoomTimeout = setTimeout( =>
+                delete @zoomTimeout
+                @startZooming factor
+            , 40)
+
+    stopZooming: ->
+        if @zoomTimeout
+            clearTimeout @zoomTimeout
+            delete @zoomTimeout
+
     zoomIn: (ev) ->
         ev.preventDefault()
-        zoomSpan = @zoomEnd - @zoomStart
-        @zoomTo @zoomStart + (zoomSpan * 0.2), @zoomEnd - (zoomSpan * 0.2)
+        @startZooming 0.01
 
     zoomOut: (ev) ->
         ev.preventDefault()
-        zoomSpan = @zoomEnd - @zoomStart
-        @zoomTo @zoomStart - (zoomSpan * 0.3), @zoomEnd + (zoomSpan * 0.3)
+        @startZooming -0.02
 
     getFullWidth: ->
         winWidth = @el.innerWidth()
